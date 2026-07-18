@@ -1,0 +1,121 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{subcaption} % Enables subfigures within a figure
+
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Experiment 1}
+	\lhead{Energy Conversion Laboratory}
+	\cfoot{\thepage}
+	
+	
+	\newpage
+	\section{}
+	\subsection{Determination of the wave shape}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.7\textwidth]{1-1-0mm.jpg}
+		\caption{The waveform with zero air gap.}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.7\textwidth]{1-1-2mm.jpg}
+		\caption{The waveform with 2mm air gap.}
+	\end{figure}
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.7\textwidth]{1-1-5mm.jpg}
+		\caption{The waveform with 5mm air gap.}
+	\end{figure}
+Observations of the current waveform under different conditions showed that amplitude increases with an increasing air gap, while the waveform becomes smoother.
+
+Increasing the air gap increases the magnetic reluctance of the circuit, forcing more flux to be supplied by the core's magnetizing inductance rather than leakage or eddy currents. This shifts the dominant behavior toward a higher-order LC resonance, which naturally filters out high-frequency noise and smooths the current waveform.
+	\subsection{Determination of Magnetic Permeability}
+
+Current Versus Voltage plot is given in two figures below. As expected, current and voltage has linear relation. The slope of the $l_g = 5 \, mm$ configuration is much higher. \newline
+\begin{tikzpicture}
+	\begin{axis}[
+		xlabel={Voltage (V)},
+		ylabel={Current (mA)},
+		title={Voltage Vs. Current $l_g = 0$ }
+		]
+		    \addplot[only marks, mark size=2pt] 
+		coordinates {
+			(12.2, 3) (21, 7) (30, 7) (39.1, 9)
+			(49.8, 11) (58.9, 12) (69.7, 14)
+			(83, 15) (89.6, 17) (100.3, 18) (106.6, 19)
+		};
+		
+	\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+	\begin{axis}[
+		xlabel={Voltage (V)},
+		ylabel={Current (mA)},
+		title={Voltage Vs. Current $l_g = 5\;mm$ }
+		]
+		\addplot[only marks, mark size=2pt] 
+		coordinates {
+			(0.2,1) (10,18) (19.9, 35) (31.1, 55)
+			(40.2, 70) (51.2, 89) (60, 104)
+			(69.6, 120) (79.9, 137) (90.6, 156) (98.8, 168) (108.8, 186)
+		};
+		
+	\end{axis}
+\end{tikzpicture}
+\newline
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width = 0.8\textwidth]{1-2-0mm.jpg}
+	\caption{X-axis is current and Y-axis is voltage under zero air gap condition. It is an ellipse with a small rotation.}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 0.8\textwidth]{1-2-5mm.jpg}
+	\caption{X-axis is current and Y-axis is voltage under $5\,mm$ air gap condition. It is an ellipse with a small rotation.}
+\end{figure}
+	The axis of ellipses are not completely align with x-axis and y-axis. Due to this observation, the phase difference of voltage and current is not exactly $90^\circ$.
+	
+	\subsection{The effect of air gap on the coil's current} 
+	\begin{tikzpicture}
+		\begin{axis}[
+			xlabel={Voltage (V)},
+			ylabel={Current (mA)},
+			title={Voltage Vs. Current $l_g = 5\;mm$ }
+			]
+			\addplot[only marks, mark size=2pt] 
+			coordinates {
+				(32.9,8) (38.2,17) (48.6,51) (55.5,81)
+				(63,106) (67.8,125) 
+			};
+			
+		\end{axis}
+	\end{tikzpicture}
+	\newline
+	Increasing the air gap drastically increases magnetic reluctance.ou need a larger magnetomotive force (MMF) (N⋅I). Since the number of turns (N) is fixed, you must increase the current. Because the core now behaves more like a resistive load than an ideal inductor at low frequencies, the voltage drop required to drive this current through the increased reluctance rises, enforces a higher input voltage.
+	\subsection{The effect of number of turn on current}
+	
+\end{document}

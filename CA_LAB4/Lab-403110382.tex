@@ -1,0 +1,156 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+
+
+
+\definecolor{sectioncolor}{RGB}{30,70,140}
+\definecolor{subsectioncolor}{RGB}{60,110,180}
+
+\titleformat{\section}
+{\Large\bfseries\color{sectioncolor}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{subsectioncolor}}
+{\thesubsection}{1em}{}
+
+\newtcbox{\var}{
+	on line,
+	colback=subsectioncolor!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	arc=3pt,
+	left=2pt,
+	right=2pt,
+	top=0.5pt,
+	bottom=0.5pt,
+	fontupper=\ttfamily
+}
+
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Lab 4}
+	\lhead{Computer Structure }
+	\cfoot{\thepage}
+	
+
+
+	
+	
+\section{Adjustable Blink}
+Following code would do it. The led would blink forever by the user on-time and off-time.
+\begin{lstlisting}[language=Python]
+rom machine import Pin
+from time import sleep_ms
+
+led = Pin(25, Pin.OUT)
+
+on_time = int(input("Enter LED ON time (ms): "))
+off_time = int(input("Enter LED OFF time (ms): "))
+
+while True:
+	led.on()
+	sleep_ms(on_time)
+
+	led.off()
+	sleep_ms(off_time)
+\end{lstlisting}
+
+\section{Adjustable Bouncer}
+It turns the LED on and off in the given period.
+\begin{lstlisting}[language=Python]
+from machine import Pin
+import time
+from time import sleep_ms
+
+led = Pin(1, Pin.OUT)
+
+bounce_time = int(input("Enter Bouncing time (us): "))
+
+
+my_list = []
+for i in range(100):
+	my_list.append((i % 7) % 3)
+t1 = time.ticks_us()
+for x in my_list:
+	t2 = time.ticks_us()
+	if (time.ticks_diff(t2,t1)) > bounce_time:
+		led.on()
+		break
+	if (x % 2) == 0:
+		led.on()
+		time.sleep_us(bounce_time//20)
+	else:
+		led.off()
+		time.sleep_us(bounce_time//20)
+\end{lstlisting}
+\section{Reading GPIO}
+
+\begin{lstlisting}[language=Python]
+from machine import Pin
+import time
+
+led = Pin(25, Pin.OUT)
+
+button = Pin(2, Pin.IN, Pin.PULL_UP)
+
+while True:
+	if button.value() == 0:
+		led.on()   
+	else:
+		led.off()  
+	time.sleep_ms(10)
+
+\end{lstlisting}
+\section{Debounce}
+\begin{lstlisting}[language=Python]
+from machine import Pin
+import time
+
+button = Pin(2, Pin.IN, Pin.PULL_UP)
+
+state_changes = 0
+last_state = button.value()
+
+print("Ready. Press the button to start counting.")
+
+while True:
+	time.sleep_ms(5)
+	current_state = button.value()
+
+	if current_state != last_state:
+		time.sleep_ms(20)
+
+		if button.value() == current_state:
+			state_changes += 1
+	print(f"State changes counted: {state_changes}")
+	last_state = current_state
+\end{lstlisting}
+\end{document}

@@ -1,0 +1,76 @@
+		
+		\newcommand{\Exjobbsnummer}[1]{
+			\begin{tikzpicture}[overlay, remember picture]
+				\path (current page.north east) ++(-18,-1) node[below left] {{\small #1}};
+			\end{tikzpicture}
+		}
+		
+		\newcommand{\Examensjobbspoang}[1]{
+			\begin{tikzpicture}[overlay, remember picture]
+				\path (current page.north east) ++(-1,-1.5) node[below left] {{\normalsize \scshape Examensarbete #1 HP}};
+			\end{tikzpicture}
+		}
+		
+		\newcommand{\datum}[1]{
+			\begin{tikzpicture}[overlay, remember picture]
+				\path (current page.north east) ++(-1,-2.0) node[below left] {{\normalsize #1}};
+		\end{tikzpicture}}
+		
+		\newcommand{\storlitentitel}[2]{
+			\center
+			\rule[0.2cm]{13cm}{0.1cm}
+			{ \huge \bfseries #1}\\[0.4cm] % Title of your document
+			{\Large \slshape #2}\\[0.4cm]
+			\rule[0.2cm]{13cm}{0.1cm}\\[3cm]
+			
+		}
+		
+		\newcommand{\Namn}[2]{
+			\begin{minipage}{0.4\textwidth}
+				\normalsize
+				\centering
+				#1 \textsc{#2}\\
+			\end{minipage}\\
+		}
+		
+		\newcommand{\LoggaSwe}{
+			\textsc{\Huge Sharif \\[0.3cm] University of Techology}\\[0.7cm]
+			\includegraphics[scale=0.4]{../logo.png}\\[1.5cm]
+		}
+		
+		\newcommand{\LoggaEng}{
+			\textsc{\Huge Uppsala University}\\[0.7cm]
+			\includegraphics[scale=0.7]{../logo.png}\\[0.5cm]
+		}
+		
+		
+		% -----------------------------------------------
+		%           HÄR BÖRJAR TITELSIDAN
+		%------------------------------------------------
+		\begin{titlepage}
+			
+			\center 
+			
+			%-------------------------------------------------
+			%	INFORMATION ATT FYLLA I
+			%-------------------------------------------------
+			
+%			\Exjobbsnummer{\today}
+			
+			% \Examensjobbspoang{15}
+			
+			
+			\LoggaSwe
+			% % \LoggaEng - Byt till engelska
+			
+			
+			\storlitentitel{Energy Conversion}{Lab Report 1}
+			
+			\Namn{Aria Fateh Kerdari}{403110382}
+			\vspace{2cm}
+			\today
+
+			
+			\vfill
+			
+		\end{titlepage}

@@ -1,0 +1,14 @@
+% Define signal parameters
+fs = 1000;              % Sampling frequency
+t = 0:1/fs:1-1/fs;      % Time vector
+
+% Create a signal
+x = sin(2*pi*50*t) + 2*randn(size(t));
+
+% Apply a moving average filter
+y = movmean(x, 20);
+
+% Plot the result
+plot(t, x, 'r'); hold on;
+plot(t, y, 'b', 'LineWidth', 2);
+title('Filtered Signal');

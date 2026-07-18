@@ -1,0 +1,127 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+
+
+
+\definecolor{sectioncolor}{RGB}{30,70,140}
+\definecolor{subsectioncolor}{RGB}{60,110,180}
+
+\titleformat{\section}
+{\Large\bfseries\color{sectioncolor}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{subsectioncolor}}
+{\thesubsection}{1em}{}
+
+\newtcbox{\var}{
+	on line,
+	colback=subsectioncolor!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	arc=3pt,
+	left=2pt,
+	right=2pt,
+	top=0.5pt,
+	bottom=0.5pt,
+	fontupper=\ttfamily
+}
+
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{PreLab 4}
+	\lhead{Computer Structure }
+	\cfoot{\thepage}
+	
+
+
+	
+	
+	\section{GPIO and Pull Resistor}
+	\begin{enumerate}[label = \alph*)]
+		\item 
+			Each pin can be configured either as input or output. When it is operating as input mode, it reads data from pin. In output mode, it is operated by the micro-controller.
+			\begin{lstlisting}[language=Python]
+from machine import Pin
+button = Pin(15, Pin.IN)
+			\end{lstlisting}
+		
+			\begin{lstlisting}[language=Python]
+from machine import Pin
+led = Pin(25, Pin.OUT)
+led.value(1)   
+		\end{lstlisting}
+		\item 
+			Floating input, reads noise. It toggles between \var{0} and \var{1}. pull-up or pull-down resistors solve this problem by connect the pin \textit{weakly} to the either voltage supply or ground. 
+			\begin{lstlisting}[language=Python]
+button = Pin(15, Pin.IN, Pin.PULL_UP)
+			\end{lstlisting}
+			
+			\item 
+			When the button is released, it is not connected to ground. The internal pull-up resistor pulls the pin to \var{1}.
+			When it is pressed, it connects the pin to the ground. The value would be \var{0}.
+	\end{enumerate}
+	
+	\section{Serial Interaction}
+	\begin{enumerate}[label = \alph*)]
+		\item 
+		We can communicate to the micro-controller through serial terminal. The micro-controller can writes data with \var{print} in serial terminal and we can give data to micro-controller with \var{input}.
+		\item  The code is following: \newline
+		\begin{lstlisting}[language=Python]
+on_time, off_time = 
+	map(int, input("On and off time (ms): ").split())
+
+print("On time:", on_time, "ms")
+print("Off time:", off_time, "ms")
+		\end{lstlisting}
+	\end{enumerate}
+	
+	\section{Debouncing}
+	\begin{enumerate}[label = \alph*)]
+		\item 
+		The answer to this question lies in the structure of a push button. In the internal circuit, two metal contacts physically touch when the button is pressed.	That touch is not perfect, metal contacts vibrate for couple of seconds. 
+		\item 
+		If the state of the button is changed, it waits for a short time (say 20ms) and then reads the state. Most button bounce lasts less than 10-50ms. If the delay takes too long, maybe the state would change in this interval and miss it. In the other hand, if the delay is too short the contacts may still be bouncing.
+		\item 
+		We check the button state repeatedly. Any state change is verified after a debounce delay. A press is counted only when a stable transition to the PRESSED state occurs.
+	\end{enumerate}
+	
+	\section{LED Blink}
+	It gets \var{on-time} and \var{off-time} from user and turns the LED on and off forever. \href{https://wokwi.com/projects/467376754595875841}{Link to the simulation.}
+	
+	\begin{lstlisting}[language=Python]
+while True:
+led.on()
+sleep_ms(on_time)
+
+led.off()
+sleep_ms(off_time)
+	\end{lstlisting}
+\end{document}

@@ -1,0 +1,90 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Energy Conversion - Assignment 6}
+	\lhead{Aria Fateh Kerdari - 403110382}
+	\cfoot{\thepage}
+
+
+\newpage
+\section{Problem 1}
+\subsection*{a)}
+At no load and neglecting armature resistance,
+
+\[
+E_A=V_T=12\text{ V}
+\]
+
+Using the DC machine emf equation,
+
+\[
+E_A=\frac{ZP}{60a}\phi n_m
+\]
+
+Hence,
+
+\[
+n_m=\frac{60aE_A}{ZP\phi}
+=\frac{60\times2\times12}{64\times2\times0.013}
+=865.38\ \text{r/min}
+\]
+
+The angular speed is
+
+\[
+\omega_m=n_m\frac{2\pi}{60}
+=90.62\ \text{rad/s}
+\]
+
+\subsection{b)}
+Using the right-hand rule, the left-side conductors experience an upward force while the right-side conductors experience a downward force. These forces produce a clockwise torque.
+
+
+
+\subsection{c)}
+Neglecting armature resistance, all electrical input power is converted into mechanical power:
+
+\[
+P_{conv}=55\text{ W}
+\]
+
+Using
+
+\[
+P_{conv}=\tau_{ind}\omega_m,
+\]
+
+the induced torque is
+
+\[
+\tau_{ind}=\frac{P_{conv}}{\omega_m}
+=\frac{55}{90.62}
+=0.607\ \text{N}\cdot\text{m}
+\]
+
+\section{Problem 3}
+
+\end{document}

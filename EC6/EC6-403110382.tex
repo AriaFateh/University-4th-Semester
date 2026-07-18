@@ -1,0 +1,186 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Energy Conversion - Assignment 6}
+	\lhead{Aria Fateh Kerdari - 403110382}
+	\cfoot{\thepage}
+
+
+\newpage
+\section{Problem 1}
+$$ n_s = \frac{120 f_e}{p} \implies 1000 = \frac{120 \times 50}{p} \implies p = 6 \text{ poles} $$
+
+
+\begin{itemize}
+	\item \textbf{Stator magnetic field speed:} Equal to the synchronous speed, $n_s = \qty{1000}{rpm}$.
+	\item \textbf{Rotor magnetic field speed:} The rotor magnetic field revolves at synchronous speed relative to the stator, so it is also \qty{1000}{rpm}. Relative to the rotor itself, it revolves at the slip speed ($n_{slip} = n_s - n_m$).
+\end{itemize}
+
+
+At No-Load:
+$$ s_{nl} = \frac{n_s - n_{nl}}{n_s} = \frac{1000 - 980}{1000} = 0.02 $$
+$$ f_{r,nl} = s_{nl} f_e = 0.02 \times 50 = \qty{1.0}{\Hz} $$
+
+At Full-Load:
+$$ s_{fl} = \frac{n_s - n_{fl}}{n_s} = 0.07 $$
+$$ f_{r,fl} = s_{fl} f_e =\qty{3.5}{\Hz} $$
+
+
+$$ SR = \frac{n_{nl} - n_{fl}}{n_{fl}} \times 100\% \approx 5.38\% $$
+
+\newpage
+\section{Problem 2}
+
+
+For a Y-connected motor, the phase voltage is:
+$$ V_\phi = \frac{V_L}{\sqrt{3}} = \frac{400}{\sqrt{3}} \approx \qty{230.94}{\V} $$
+The synchronous angular speed is:
+$$ \omega_s = \frac{4 \pi f_e}{p} = \qty{314.16}{\radian/\second} $$
+
+
+The rotor impedance referred to the stator at $s = 0.05$ is:
+$$ Z_2 = \frac{R_2}{s} + jX_2  = 1.36 + j0.18 \ \Omega $$
+The parallel branch impedance (magnetizing reactance and rotor impedance):
+$$ Z_p = \frac{jX_M \cdot Z_2}{jX_M + Z_2} \approx 1.258 + j0.404 \ \Omega $$
+Total equivalent impedance:
+$$ Z_{eq} = R_1 + jX_1 + Z_p = 1.336 + j0.584 \ \Omega $$
+$$ Z_{eq} \approx 1.458 \angle 23.6^\circ \ \Omega $$
+The line current (equal to phase current in Y-connection):
+$$ \mathbf{I}_1 = \frac{V_\phi}{Z_{eq}} = \frac{230.94 \angle 0^\circ}{1.458 \angle 23.6^\circ} = 158.4 \angle -23.6^\circ \ \text{A} $$
+Stator power factor:
+$$ PF = \cos(23.6^\circ) = 0.916 \text{ lagging} $$
+
+
+Stator copper loss:
+$$ P_{scl} = 3 I_1^2 R_1 = 3 (158.4)^2 (0.078) \approx \qty{5871}{\W} = \qty{5.87}{\kilo\W} $$
+Input power:
+$$ P_{in} = \sqrt{3} V_L I_L \cos\theta= \qty{100.5}{\kilo\W} $$
+Air-gap power:
+$$ P_{ag} = P_{in} - P_{scl} - P_{core} = \qty{93.33}{\kilo\W} $$
+Converted power (Mechanical power developed):
+$$ P_{conv} = (1 - s)P_{ag} \approx \qty{88.66}{\kilo\W} $$
+Output power:
+$$ P_{out} = P_{conv} - P_{mech} =\qty{87.56}{\kilo\W} $$
+
+
+Electromagnetic torque:
+$$ T_e = \frac{P_{ag}}{\omega_s} \approx \qty{297.1}{\newton\meter} $$
+Rotor speed:
+$$ \omega_m = (1 - s)\omega_s = \qty{298.45}{\radian/\second} $$
+Load torque:
+$$ T_{load} = \frac{P_{out}}{\omega_m} \approx \qty{293.4}{\newton\meter} $$
+Overall efficiency:
+$$ \eta = \frac{P_{out}}{P_{in}} \approx 87.1\% $$
+
+
+Using the Thevenin equivalent circuit:
+$$ V_{th} \approx V_\phi \frac{X_M}{X_1 + X_M} \approx \qty{225.07}{\V} $$
+$$ R_{th} \approx R_1 \left(\frac{X_M}{X_1 + X_M}\right)^2 \approx \qty{0.0741}{\Omega} $$
+$$ X_{th} \approx X_1 = \qty{0.18}{\Omega} $$
+The slip at maximum (pull-out) torque is:
+$$ s_{max} = \frac{R_2}{\sqrt{R_{th}^2 + (X_{th} + X_2)^2}} \approx 0.185 $$
+The pull-out torque is:
+$$ T_{max} = \frac{3 V_{th}^2}{2 \omega_s \left[ R_{th} + \sqrt{R_{th}^2 + (X_{th} + X_2)^2} \right]} $$
+$$ T_{max} \approx \qty{547.8}{\newton\meter} $$
+
+
+
+For maximum torque to occur at starting, we need $s_{max} = 1$. This means the total rotor resistance referred to the stator ($R_{2,new}$) must equal the denominator of the $s_{max}$ formula:
+$$ R_{2,new} = \sqrt{R_{th}^2 + (X_{th} + X_2)^2} = \qty{0.3675}{\Omega} $$
+The external resistance referred to the stator is:
+$$ R_{ext}' = R_{2,new} - R_2 = \qty{0.2995}{\Omega} $$
+To find the actual physical external resistance to be added per phase to the rotor, we divide by the square of the turns ratio ($a^2$):
+$$ R_{ext} = \frac{R_{ext}'}{a^2} \approx \qty{0.0749}{\Omega} \text{ per phase} $$
+The value of the starting torque with this added resistance is simply the maximum torque computed above:
+$$ T_{start} = T_{max} \approx \qty{547.8}{\newton\meter} $$
+
+
+\newpage
+\section{Problem 3}
+The synchronous speed in rpm and rad/s is:
+\begin{align*}
+	n_{sync} &= \frac{120f}{p} = \frac{120 \times 60}{4} = \SI{1800}{rpm} \\
+	\omega_{sync} &= 1800 \times \frac{2\pi}{60} = \SI{188.5}{rad/s}
+\end{align*}
+
+Since the motor is Y-connected, the phase voltage is:
+\begin{equation*}
+	V_\phi = \frac{V_L}{\sqrt{3}} = \frac{230}{\sqrt{3}} = \SI{132.79}{V}
+\end{equation*}
+
+
+To simplify the torque equations, we find the Thevenin voltage ($V_{th}$) and impedance ($Z_{th} = R_{th} + jX_{th}$) looking into the circuit from the rotor terminals.
+\begin{align*}
+	V_{th} &\approx V_\phi \left( \frac{X_M}{X_1 + X_M} \right)\approx \SI{128.79}{V} \\
+	R_{th} &\approx R_1 \left( \frac{X_M}{X_1 + X_M} \right)^2 \approx \SI{0.320}{\Omega} \\
+	X_{th} &= X_1 \parallel X_M = \SI{0.485}{\Omega}
+\end{align*}
+
+Since rotational losses are zero, the developed mechanical power ($P_{conv}$) equals the output power:
+\begin{equation*}
+	P_{conv} = P_{out} = \SI{7460}{W}
+\end{equation*}
+The load torque at full load ($s=0.04$) is:
+\begin{equation*}
+	T_{load} = \frac{P_{conv}}{\omega_m} = \frac{7460}{\omega_{sync}(1-s)} = \SI{41.22}{N.m}
+\end{equation*}
+
+The torque equation of the induction motor is given by:
+\begin{equation*}
+	T = \frac{3 V_{th}^2 \left(\frac{R_2}{s}\right)}{\omega_{sync} \left[ \left(R_{th} + \frac{R_2}{s}\right)^2 + (X_{th} + X_2)^2 \right]}
+\end{equation*}
+Let $x = \frac{R_2}{0.04}$. Solving this resulting quadratic equation for $x$ yields $x \approx 5.568$, which gives:
+\begin{equation*}
+	R_2 = \SI{0.223}{\Omega}
+\end{equation*}
+
+The slip at which maximum (pullout) torque occurs is:
+\begin{equation*}
+	s_{max} = \frac{R_2}{\sqrt{R_{th}^2 + (X_{th} + X_2)^2}}
+\end{equation*}
+\begin{equation*}
+	s_{max} \approx 0.215
+\end{equation*}
+
+The equation for maximum induced torque is independent of $R_2$:
+\begin{equation*}
+	T_{max} = \frac{3 V_{th}^2}{2 \omega_{sync} \left[ R_{th} + \sqrt{R_{th}^2 + (X_{th} + X_2)^2} \right]}
+\end{equation*}
+\begin{equation*}
+	T_{max}\approx \SI{97.38}{N.m}
+\end{equation*}
+
+
+The starting torque occurs when slip $s = 1.0$:
+\begin{equation*}
+	T_{start} = \frac{3 V_{th}^2 R_2}{\omega_{sync} \left[ (R_{th} + R_2)^2 + (X_{th} + X_2)^2 \right]}
+\end{equation*}
+\begin{equation*}
+	T_{start} \approx \SI{46.52}{N.m}
+\end{equation*}
+
+
+\end{document}

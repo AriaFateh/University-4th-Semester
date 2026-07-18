@@ -1,0 +1,107 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+
+
+
+\definecolor{sectioncolor}{RGB}{30,70,140}
+\definecolor{subsectioncolor}{RGB}{60,110,180}
+
+\titleformat{\section}
+{\Large\bfseries\color{sectioncolor}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{subsectioncolor}}
+{\thesubsection}{1em}{}
+
+\newtcbox{\var}{
+	on line,
+	colback=subsectioncolor!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	arc=3pt,
+	left=2pt,
+	right=2pt,
+	top=0.5pt,
+	bottom=0.5pt,
+	fontupper=\ttfamily
+}
+
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{PreLab. 1}
+	\lhead{Computer Structure }
+	\cfoot{\thepage}
+	
+	\section{Questions}
+	\begin{enumerate}
+		\item 
+		An ALU (Arithmetic Logic Unit) is a core component of the CPU that performs arithmetic and logical operations on binary data. Arithmetic operations such as, addition, subtraction and increment/decrement. Logical operations such as, AND, OR, NOT, XOR and bit shifting. 
+		\item 
+		\var{S0-S3} and \var{M} is for the function select. 16 different operation is available.
+		Due to the "AC characteristic" table in the data sheet, the longest delay is for $\overline{A \oplus B}$.
+		\item 
+			In puts are given to ALU through \var{A} and \var{B} input pins. With the function select pins we chose XNOR($S_0 = S_3=M = H\quad S_1 = S_2 = L$). 
+			
+		\item 
+			Due to the AT28C16 data sheet, it has 16k memory. Maximum address to output delay is 150 ns.
+		\item 
+		By connecting the synchronous counter to addresses(first 4) we can have first 16 memory locations.
+	\end{enumerate}
+	
+	\section{Simulation}
+	\subsection{XOR From NAND}
+	The designed circuit is shown if figure \eqref{XOR}. Truth table associated with this circuit is shown below.
+		\begin{center}
+			\begin{tabular}{cc|c}
+				$A$&$B$&$X$\\
+				\hline
+				$0$&$0$&$0$\\
+				$0$&$1$&$1$\\
+				$1$&$0$&$1$\\
+				$1$&$1$&$0$\\
+			\end{tabular}
+		\end{center}
+		
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.7\textwidth]{1.jpg}
+		\caption{\var{XOR} gate is implemented with \var{NAND}.}
+		\label{XOR}
+	\end{figure}
+	\subsection{Counting Sheep}
+	The circuit implementation is shown in figure \eqref{Counter}.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.7\textwidth]{2.jpg}
+		\caption{A Counter which counts form 0 to 31 and the number is shown with LEDs.}
+		\label{Counter}
+	\end{figure}
+	
+\end{document}

@@ -1,0 +1,351 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Energy Conversion - Assignment 6}
+	\lhead{Aria Fateh Kerdari - 403110382}
+	\cfoot{\thepage}
+
+
+\newpage
+\section*{Problem 1}
+
+\subsection*{(a)}
+First, we determine the rated input power and rated current of the motor. The output power in watts is:
+\[ P_{\text{out}} = 100 \text{ hp} \times 746 \text{ W/hp} = 74 600 \text{ W} \]
+
+The input power is calculated using the efficiency ($\eta$):
+\[ P_{\text{in}} = \frac{P_{\text{out}}}{\eta} = 80 215.05 \text{ W} \]
+
+For a three-phase system, the rated line current ($I_{\text{rated}}$) is found using $P_{\text{in}} = \sqrt{3} V_L I_L \text{PF}$:
+\[ I_{\text{rated}} = \frac{P_{\text{in}}}{\sqrt{3} V_L \text{PF}}\approx 113.13 \text{ A} \]
+
+The starting torque of an induction motor is proportional to the square of the applied voltage ($T \propto V^2$).
+\[ \frac{T_{\text{start2}}}{T_{\text{start1}}} = \left( \frac{V_2}{V_1} \right)^2 \]
+\[ \frac{1.0 T_{\text{fl}}}{1.9 T_{\text{fl}}} = \left( \frac{V_2}{460} \right)^2 \]
+\[ V_2 \approx 333.72 \text{ V} \]
+
+
+\vspace{0.5cm}
+
+\subsection*{(b)}
+
+
+\[ I_{\text{start1, motor}} = 7.5 \times 113.13 \text{ A} = 848.48 \text{ A} \]
+
+At the reduced voltage of $333.72 \text{ V}$, the motor's starting current ($I_{\text{start2, motor}}$) becomes:
+\[ I_{\text{start2, motor}} = I_{\text{start1, motor}} \times \left( \frac{V_2}{V_1} \right) = 615.47 \text{ A} \]
+
+Because an autotransformer is used, the power (and VA) on the primary and secondary sides are conserved ($V_1 I_{\text{line}} = V_2 I_{\text{motor}}$).
+\[ I_{\text{line}} = I_{\text{start2, motor}} \times \left( \frac{V_2}{V_1} \right) = 446.67 \text{ A} \]
+
+
+\newpage
+
+\section*{Problem 2}
+
+\begin{enumerate}[label=(\alph*)]
+	\item \textbf{Slip $s$:} Since the load torque remains constant, the ratio $\frac{s}{R_2}$ must remain constant. Therefore, to compensate for the doubled resistance, the slip $s$ must \textbf{double}.
+	\item \textbf{Motor speed $n_m$:} Motor speed is given by $n_m = n_{\text{sync}}(1 - s)$. Because the slip $s$ has increased (doubled), the motor speed $n_m$ will \textbf{decrease}.
+	\item \textbf{The induced voltage in the rotor ($E_R$):} The rotor induced voltage is given by $E_R = sE_{R0}$ (where $E_{R0}$ is the locked-rotor voltage). Since the slip $s$ doubles, the induced rotor voltage $E_R$ will \textbf{double}.
+	\item \textbf{The rotor current ($I_R$):} At low slip, $I_R \approx \frac{sE_{R0}}{R_2}$. Because both the slip $s$ and the rotor resistance $R_2$ double, the changes cancel each other out. Thus, the rotor current remains \textbf{approximately the same}.
+	\item \textbf{Induced Torque ($T_{\text{ind}}$):} The motor must overcome the mechanical load. Since the load is a constant 27\% torque load, the induced torque remains \textbf{unchanged}.
+	\item \textbf{Output Power ($P_{\text{out}}$):} Output power is $P_{\text{out}} = T_{\text{load}} \omega_m$. The torque is constant but the mechanical speed $\omega_m$ has decreased, so the output power \textbf{decreases}.
+	\item \textbf{Rotor Copper Losses ($P_{\text{RCL}}$):} Rotor copper loss is calculated as $P_{\text{RCL}} = 3 I_R^2 R_2$. Since $I_R$ is constant and $R_2$ is doubled, the rotor copper losses will \textbf{double}.
+	\item \textbf{Overall efficiency ($\eta$):} Efficiency is $\eta = \frac{P_{\text{out}}}{P_{\text{in}}}$. Because output power decreases and $I^2R$ internal losses increase while input power remains relatively similar, the overall efficiency \textbf{decreases}.
+\end{enumerate}
+
+\newpage
+
+\section*{Problem 3}
+
+Neglecting stator resistance and leakage reactance, the maximum torque $T_{\text{max}}$ is proportional to $\left(\frac{V}{f}\right)^2$, and the synchronous speed is $n_{\text{sync}} = \frac{120f}{P}$.
+
+\begin{enumerate}[label=(\alph*)]
+	\item
+	\textbf{Torque:} Since $T \propto V^2$, halving the voltage reduces the maximum torque (pullout torque) and torque at any given slip to \textbf{one-quarter (25\%)} of its normal value.\\
+	\textbf{Speed:} The synchronous speed $n_{\text{sync}}$ remains completely unchanged because the frequency is normal. The slip at which maximum torque occurs ($s_{\text{max}} = \frac{R_2}{X_2}$) also remains the same. 
+	
+	\item 
+	\textbf{Torque:} The ratio of $\frac{V}{f}$ remains constant. Therefore, the maximum (pullout) torque remains \textbf{the same} as the normal characteristic curve.\\
+	\textbf{Speed:} The synchronous speed $n_{\text{sync}}$ is exactly \textbf{halved} because $f$ is halved.\\
+	\textbf{Curve Shift:} The torque-speed curve retains its exact shape and amplitude but is shifted to the left on the speed axis. 
+\end{enumerate}
+
+\newpage
+
+\section*{Problem 4}
+
+
+\[ V_{DC} = 13.5 \text{ V}, \quad I_{DC} = 64 \text{ A} \]
+\[ R_{DC} = \frac{V_{DC}}{I_{DC}} = \frac{13.5}{64} = 0.2109 \text{ }\Omega \]
+Since the motor is $\Delta$-connected, the resistance between two terminals is two phases in series, parallel with the third phase:
+\[ R_{DC} = \frac{R_1(2R_1)}{R_1+2R_1} = \frac{2}{3}R_1 \]
+\[ R_1 = 0.316 \text{ }\Omega \]
+
+No load test:
+
+\[ V_{L,NL} = 208 \text{ V}, \quad I_{L,NL} = 22.0 \text{ A}, \quad P_{NL} = 1200 \text{ W} \]
+For a $\Delta$-connected motor:
+\[ V_{\phi,NL} = 208 \text{ V} \]
+\[ I_{\phi,NL} =  12.70 \text{ A} \]
+The no-load impedance $Z_{NL}$ is:
+\[ Z_{NL} = \frac{V_{\phi,NL}}{I_{\phi,NL}} = 16.38 \text{ }\Omega \]
+The no-load resistance $R_{NL}$ is:
+\[ R_{NL} = \frac{P_{NL}}{3 I_{\phi,NL}^2} = 2.48 \text{ }\Omega \]
+The no-load reactance $X_{NL}$ is:
+\[ X_{NL} = \sqrt{Z_{NL}^2 - R_{NL}^2} =16.19 \text{ }\Omega \]
+
+
+
+The locked-rotor test is conducted at 15 Hz to find the series impedances.
+\[ V_{L,LR} = 24.6 \text{ V}, \quad I_{L,LR} = 64.5 \text{ A}, \quad P_{LR} = 2200 \text{ W}, \quad f_{test} = 15 \text{ Hz} \]
+For a $\Delta$-connected motor:
+\[ V_{\phi,LR} = 24.6 \text{ V} \]
+\[ I_{\phi,LR} =37.24 \text{ A} \]
+The locked-rotor impedance at 15 Hz is:
+\[ Z_{LR}^{\prime} = \frac{V_{\phi,LR}}{I_{\phi,LR}} = 0.661 \text{ }\Omega \]
+The locked-rotor resistance $R_{LR}$ is:
+\[ R_{LR} = \frac{P_{LR}}{3 I_{\phi,LR}^2} = 0.529 \text{ }\Omega \]
+The locked-rotor reactance at 15 Hz is:
+\[ X_{LR}^{\prime} = \sqrt{(Z_{LR}^{\prime})^2 - R_{LR}^2}  = 0.396 \text{ }\Omega \]
+Converting this reactance to the nominal frequency of 60 Hz:
+\[ X_{LR} = X_{LR}^{\prime} \left( \frac{60}{15} \right) = 1.584 \text{ }\Omega \]
+
+
+For a NEMA Design Class B motor, the locked-rotor reactance is distributed as $X_1 = 0.4 X_{LR}$ and $X_2 = 0.6 X_{LR}$.
+\[ X_1  = 0.634 \text{ }\Omega \]
+\[ X_2  = 0.950 \text{ }\Omega \]
+Now, calculate the magnetizing reactance $X_M$:
+\[ X_M = X_{NL} - X_1 =  15.556 \text{ }\Omega \]
+Finally, calculate the rotor resistance referred to the stator $R_2$:
+\[ R_2 = R_{LR} - R_1 = 0.213 \text{ }\Omega \]
+
+\begin{figure}
+	\centering
+	\includegraphics[width = 0.75\textwidth]{1.jpg}
+	\caption{For Problem 4.}
+\end{figure}
+\newpage
+\section*{Problem 6}
+When an induction generator operates alone (isolated from the main power grid), it lacks the external reactive power usually supplied by the grid to excite its magnetic field. Instead, it must be self-excited, typically by a three-phase capacitor bank connected across its stator terminals.
+
+The terminal voltage of a stand-alone induction generator is controlled and determined by four primary factors:
+
+\begin{itemize}
+	\item \textbf{The Size of the Capacitor Bank (Primary Control):} 
+	The terminal voltage is established at the exact point where the V-I characteristic line of the capacitors intersects the magnetization curve of the induction machine. Increasing the capacitance decreases the capacitive reactance ($X_C$), which lowers the slope of the capacitor line, moving the intersection point higher up the magnetization curve and resulting in a higher terminal voltage.
+	
+	\item \textbf{The Machine's Magnetization Curve:} 
+	The inherent design of the induction machine and the magnetic saturation of its iron core determine the shape of the voltage build-up curve. Without magnetic saturation, the voltage would theoretically increase to infinity; saturation is what stabilizes the voltage at a specific operating point.
+	
+	\item \textbf{Prime Mover Speed:} 
+	The rotational speed of the shaft driven by the prime mover dictates the operating frequency. A higher rotational speed increases the induced voltage for a given flux, effectively shifting the magnetization curve upward and increasing the resulting terminal voltage.
+	
+	\item \textbf{The Connected Load:} 
+	Once a load is connected, it draws active and (often) reactive power. Induction generators have very poor voltage regulation, meaning the terminal voltage will collapse rapidly as the load increases. To maintain a constant terminal voltage under varying loads, the capacitive reactive power supplied to the generator must be continuously adjusted (often through power electronics like a Static VAR Compensator).
+\end{itemize}
+\newpage
+\section*{Problem 7}
+
+A 460-V, $\Delta$-connected, two-pole, 75-hp, 60-Hz induction motor has
+starting code letter E.
+
+From the NEMA code-letter table,
+
+\[
+4.50 \le \frac{\text{kVA}}{\text{hp}} < 5.00
+\]
+
+For maximum current, use the upper limit
+
+\[
+\frac{\text{kVA}}{\text{hp}} = 5.0
+\]
+
+The rated horsepower is
+
+\[
+P_{rated}=75\ hp
+\]
+
+Hence the maximum locked-rotor apparent power is
+
+\[
+S_{LR}=375\ {\rm kVA}
+\]
+
+For a three-phase motor,
+
+\[
+S=\sqrt{3}V_L I_L
+\]
+
+therefore
+
+\[
+I_{LR}
+=
+470.6\ {\rm A}
+\]
+
+
+\subsection*{(b)}
+
+For a motor designed to run in $\Delta$, changing the stator connection to Y
+reduces the phase voltage by a factor of
+
+\[
+\frac{1}{\sqrt3}
+\]
+
+\[
+I_{start,Y}
+=
+\frac{I_{start,\Delta}}{3}
+=
+156.9\ {\rm A}
+\]
+
+\subsection*{(c)}
+
+For a 1.25:1 step-down autotransformer,
+
+\[
+k=\frac{V_{motor}}{V_{line}}
+=
+\frac{1}{1.25}
+=
+0.8
+\]
+
+Motor current scales directly with voltage:
+
+\[
+I_m=kI_{LR}
+\]
+
+The line current is
+
+\[
+I_L=kI_m=k^2I_{LR}
+\]
+
+Thus
+
+\[
+I_L=301.2\ {\rm A}
+\]
+
+\newpage
+
+\section*{Problem 8}
+
+The motor of Problem 7-19 is operating at rated load.
+
+\subsection*{(a) }
+
+At rated load,
+
+\[
+s=0.035
+\]
+
+\subsection*{(b) }
+
+\[
+f_r=sf_e
+\]
+
+
+\[
+{f_r=2.1\ {\rm Hz}}
+\]
+
+\subsection*{(c)}
+
+From Problem 7-19,
+
+\[
+T_{ind}=205\ {\rm N\,m}
+\]
+
+\subsection*{(d) }
+
+When two stator leads are exchanged, the rotating magnetic field reverses.
+
+The new slip becomes
+
+\[
+s_p=2-s
+\]
+
+Therefore
+
+\[
+{s_p=1.965}
+\]
+
+\subsection*{(e)}
+
+\[
+f_r=s_pf_e
+\]
+
+\[
+{f_r=117.9\ {\rm Hz}}
+\]
+
+\subsection*{(f)}
+
+Using
+
+\[
+T=
+\frac{3V_{TH}^2(R_2/s)}
+{\omega_s
+	\left[
+	(R_{TH}+R_2/s)^2
+	+
+	(X_{TH}+X_2)^2
+	\right]}
+\]
+
+with
+
+\[
+s=1.965
+\]
+
+gives
+
+\[
+T_{plug}
+=
+-87.5\ {\rm N\,m}
+\]
+
+
+\end{document}

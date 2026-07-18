@@ -1,0 +1,103 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Electromagnetic - Assignment 1}
+	\lhead{Aria Fateh Kerdari}
+	\cfoot{\thepage}
+	
+	\section{Problem 1}
+	First we calculate vectors in the given point in space. And then the perpendicular vector is determined by cross product of $\textbf{A}$ and $\textbf{B}$ at that point.
+	
+	\begin{equation}
+		\textbf{A} = 4\, \hat{r} - \sqrt{2} \, \hat{\theta} + \hat{\varphi}  \quad \textbf{B} = \sqrt{2} \, \hat{\theta} + \hat{\varphi}
+	\end{equation}
+	\begin{equation}
+		\frac{ \textbf{A} \times \textbf{B}}{|\textbf{A} \times \textbf{B}|} = -0.378\, \hat{r} - 0.534 \, \hat{\theta} + 0.756 \, \hat{\varphi}
+	\end{equation}
+	
+	\section{Problem 2}
+	
+	\begin{equation}
+		\int_{C} \sin(\varphi) \, \hat{a_r} a \text{d}\varphi
+	\end{equation}
+	For take this integral we need to write the function in x-y coordinate system. 
+	\begin{equation}
+		\textbf{A} = \sin{\varphi} \cos{\varphi} \, \hat{i} + \sin{\varphi} \sin{\varphi} \, \hat{j} 
+	\end{equation} 
+		\begin{equation}
+		\int_{C} \textbf{A} a \text{d}\varphi = \frac{\pi a}{2} \, \hat{j}
+	\end{equation}
+	\section{Problem 3}
+	As definition for a counter-clockwise path we define $d\textbf{l}$ as following.
+	\begin{equation}
+		\text{d}\textbf{l} = - a \sin{\varphi} d\varphi \; \hat{i} + a \cos{\varphi} d\varphi \; \hat{j}
+	\end{equation}
+	\begin{equation}
+		\int_C V \; \text{d}\textbf{l} = a^2 \int_0^\pi \cos{\varphi}^2 \left( - \sin{\varphi} \; \hat{i} +  \cos{\varphi} \; \hat{j} \right) \; \text{d}\varphi = a^2 
+	\end{equation}
+	\begin{equation}
+		\int_C V\; \text{d}\textbf{l} = -\frac23 a^2 \; \hat{i}
+	\end{equation}
+	\section{Problem 4}
+	To determine the integral, we divide the surface into two. One is part of a sphere. The other one, is body of a cone.
+	\begin{equation}
+		\hat{n_1} = \hat{r} \quad , \quad \hat{n_2} = \hat{\theta}
+	\end{equation}
+	\begin{equation}
+		\int_S \textbf{A} \cdot \text{d}\textbf{S} = \int_{S_1} \textbf{A} \cdot \hat{n_1} a^2 \sin{\theta} \; \text{d}\theta \text{d}\varphi + \int_{S_2} \textbf{A} \cdot \hat{n_2} \; r \sin{\theta} \; \text{d}r \text{d}\varphi
+	\end{equation}
+	\begin{equation}
+		I_1 = \int_{\theta = 0}^{\frac\pi6} \int_{\varphi = 0}^{2\pi} a^4 \sin{\theta}^2 \; \text{d}\varphi \text{d}\theta = a^4\pi \left(\frac{\pi}{6} - \frac{\sqrt{3}}{4}\right)
+	\end{equation}
+	\begin{equation}
+		I_2 = \int_{R = 0}^{a} \int_{\varphi = 0}^{2\pi} 4 r^3 \cos{\frac\pi6} \sin{\frac\pi6} \; \text{d}r \text{d}\varphi  = a^4 \pi \frac{\sqrt{3}}{2} 
+	\end{equation}
+	\begin{equation}
+		\int_S \textbf{A} \cdot \text{d}\textbf{S} = I_1 + I_2 = a^4\pi \left(\frac{\pi}{6} + \frac{\sqrt{3}}{4}\right)
+	\end{equation}
+	\section{Problem 5}
+	\subsection{a)}
+	\begin{equation}
+		\nabla V = e^{7x + 16y}\left(7 \cos{4z} \; \hat{i} + 16 \cos{4z} \; \hat{j} - 4 \sin{4z} \; \hat{k} \right)
+	\end{equation}
+	\begin{equation}
+		\nabla V (\textbf{P}) = 2517\; \hat{i} + 5753 \; \hat{j} -3700 \; \hat{k} 
+	\end{equation}
+	\subsection{b)}
+	\begin{equation}
+		\nabla C = 4 e^{-3z} \left( \sin{\varphi} \; \hat{r} + \cos{\varphi} \; \hat{\varphi} - 3r \sin{\varphi}  \; \hat{z} \right)
+	\end{equation}
+	\begin{equation}
+		\nabla C(\textbf{P}) = 2 \; \hat{r} + 2 \sqrt{3} \; \hat{\varphi} - 18  \; \hat{z}
+	\end{equation}
+	\subsection{c)}
+	\begin{equation}
+		\nabla S = \frac1{R^5} \left( -4 \sin{\theta} \sin{\varphi} \; \hat{r} + \cos{\theta}\sin{\varphi} \; \hat{\theta} - \cos{\varphi}  \; \hat{\varphi} \right)
+	\end{equation}
+	\begin{equation}
+		\nabla S(\textbf{P}) = -\sqrt{3} \; \hat{r} +  \frac34 \; \hat{\theta} - \frac12  \; \hat{\varphi}
+	\end{equation}
+\end{document}

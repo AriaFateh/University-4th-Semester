@@ -1,0 +1,383 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+
+
+
+\definecolor{sectioncolor}{RGB}{30,70,140}
+\definecolor{subsectioncolor}{RGB}{60,110,180}
+
+\titleformat{\section}
+{\Large\bfseries\color{sectioncolor}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{subsectioncolor}}
+{\thesubsection}{1em}{}
+
+\lstset{
+	language=Matlab,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue!70!black}\bfseries,
+	commentstyle=\color{green!50!black},
+	stringstyle=\color{red!70!black},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=10pt,
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false
+}
+
+
+\newtcbox{\var}{
+	on line,
+	colback=subsectioncolor!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	arc=3pt,
+	left=2pt,
+	right=2pt,
+	top=0.5pt,
+	bottom=0.5pt,
+	fontupper=\ttfamily
+}
+
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Computer Assignment 1}
+	\lhead{Signals and Systems }
+	\cfoot{\thepage}
+	
+	\section{Introduction to MATLAB: Signal Representation}
+	
+	\subsection{Plotting Discrete and Continuous Signals}
+	In this section, various discrete and continuous signals were defined and plotted. For discrete signals, the \var{stem} function was utilized, while continuous signals were plotted using the \var{plot} function. 
+	
+	To approximate continuous signals in MATLAB, a sufficiently small sampling step (e.g., $dt = 0.01$) was chosen to ensure smooth transitions without visual aliasing. For the continuous convolution $x_7(t) = x_5(t) * x_6(t)$, the step size must be carefully managed to approximate the integral $y(t) = \int x_5(\tau)x_6(t-\tau)d\tau$, meaning the discrete convolution result was scaled by $dt$.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{1-1.png} % Replace with your image name
+		\caption{Plots of the discrete and continuous signals.}
+		\label{fig:signals}
+	\end{figure}
+	
+	\subsection{Composite Figure and Geometric Shapes}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{1-2.png} % Replace with your image name
+		\caption{Composite figure showing math functions and geometric shapes.}
+		\label{fig:composite}
+	\end{figure}
+	
+	\section{Convolution and Implementation Analysis}
+	
+	\subsection{1D Convolution Implementation}
+	To understand the mechanics of linear convolution, the operation $y[n] = x[n] * h[n]$ was implemented in three custom ways without using the built-in \var{conv} function.
+	
+	\textbf{1. Loop-based Implementation (\var{myConvLoop}):} 
+	This approach directly implements the convolution sum:
+	$$ y[n] = \sum_{k=-\infty}^{\infty} x[k]h[n-k] $$
+	Using two nested loops, the outer loop iterates over the output length $L_y = L_x + L_h - 1$, and the inner loop calculates the sum of the products of overlapping elements.
+	
+	\textbf{2. Matrix-based Implementation (\var{myConvMatrix}):}
+	Convolution can be modeled as a matrix multiplication $Y = H \cdot X$, where $H$ is a Toeplitz matrix constructed from the impulse response $h[n]$. This method maps the sliding window of convolution into a fixed matrix structure, avoiding nested loops and leveraging MATLAB's highly optimized vector operations.
+	
+	
+	\textbf{3. FFT-based Implementation}: In the Fourier space convolution turns into multiplication. It is much faster to execute than two previous methods. 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{2-1.png} % Replace with your image name
+		\caption{Results of pairwise convolutions using custom functions.}
+		\label{fig:conv}
+	\end{figure}
+	
+	\subsection{Timing and Performance Comparison}
+	The execution times of \var{myConvLoop}, \var{myConvMatrix} and MATLAB's \var{conv} were measured using \var{tic} and \var{toc} for random vectors of length $N > 500$.
+	
+	The loop-based method is the slowest because MATLAB is an interpreted language where loop overhead is significant. The matrix method is faster due to internal vectorization. However, MATLAB's built-in \var{conv} is overwhelmingly the fastest as it is implemented as a pre-compiled, highly optimized C/C++ function, often utilizing Fast Fourier Transforms (FFT) for large arrays to reduce complexity from $O(N^2)$ to $O(N \log N)$.
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{2-2.png} % Replace with your image name
+		\caption{Timing of difference method. As it was expected, the built-in function is much faster than implemented functions.}
+		\label{fig:timeConv}
+	\end{figure}
+			\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{2-3.png} % Replace with your image name
+		\caption{Fourier transform-based function versus built-in \var{conv} function.}
+		\label{fig:FourierVsBuilt-in}
+	\end{figure}
+	
+\section{Interpolation and Image Processing}
+
+\subsection{1D Linear Interpolation}
+To increase the sampling rate of a discrete signal $x[n]$ by a factor of $L=3$, the signal was first upsampled to create $w[n]$ by inserting $L-1 = 2$ zeros between every sample of $x[n]$. 
+To perform linear interpolation, this zero-inserted signal $w[n]$ was convolved with an interpolation filter $f[n]$. For linear interpolation with $L=3$, the ideal discrete filter is a triangular pulse of length $2L-1$ centered at zero:
+$$ f[n] = 3 \frac{\sin\left(\frac\pi3 \cdot n\right)}{\pi n} $$
+The final interpolated signal is obtained via $y[n] = w[n] * f[n]$. The filter essentially acts as a low-pass filter, smoothing the abrupt changes caused by the zero-insertion.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{3-2.png} % Replace with your image name
+	\caption{Original signal and filter.}
+	\label{fig:signal-Filter}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{3-1.png} % Replace with your image name
+	\caption{zero-inserted signal, and the linearly interpolated output.}
+	\label{fig:1d_interp}
+\end{figure}
+
+\subsection{2D Image Enlargement}
+The concept of 1D interpolation was extended to 2D image processing. An image was enlarged by a factor of 3 by inserting rows and columns of zeros and convolving the result with a 2D interpolation kernel. 
+The custom convolution approach was compared with MATLAB's built-in \var{imresize(..., 'bilinear')} function. The results are visually very similar, as both methods mathematically apply bilinear interpolation.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{3-3.png} % Replace with your image name
+	\caption{Comparison of custom 2D enlargement and MATLAB's imresize.}
+	\label{fig:2d_interp}
+\end{figure}
+
+\section{Matched Filter and Edge Detection}
+
+\subsection{1D Pattern Detection}
+A matched filter was utilized to find occurrences of a specific pattern $a[n] = [1, -1, -1, 1]$ inside a longer, random binary sequence $x[n]$. The matched filter impulse response $p[n]$ is simply the time-reversed version of the target pattern:
+$$ p[n] = a[-n] $$
+By computing the convolution $y[n] = x[n] * p[n]$, the output is maximized at the exact locations where the pattern aligns with the signal. The peaks in $y[n]$ equal the energy of the pattern, allowing us to successfully report the starting indices of the pattern in $x[n]$.
+
+\subsection{Pattern Detection in Images}
+This concept was applied to 2D arrays to locate a visual pattern inside a noisy binary image. A 2D matched filter (the flipped pattern matrix) was convolved with the image. The output was visualized as a heatmap, where the global maximum indicates the exact center of the detected pattern.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{4-1.png} % Replace with your image name
+	\caption{Heatmap of the 2D matched filter output indicating pattern location.}
+	\label{fig:matched2d}
+\end{figure}
+
+\section{Image Processing and Simulation}
+
+\subsection{Image Processing Basics}
+A color image was loaded, and its R, G, and B channels were separated and displayed. 
+To convert the image to grayscale, two methods were used: a simple mathematical average of the three channels ($I_{gray} = (R+G+B)/3$), and the built-in \var{rgb2gray} function. The built-in function yields a perceptually better image because it applies weighted averages (e.g., $0.299R + 0.587G + 0.114B$).
+
+
+The image was then converted to a binary image using \var{imbinarize}, which automatically calculates a global threshold (using Otsu's method) to separate pixels into foreground (1) and background (0).
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = \textwidth]{5-1.png}
+	\caption{The image decomposed to 3 channel.}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = \textwidth]{5-2.png}
+	\caption{Gray scale image with two method.}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = \textwidth]{5-3.png}
+	\caption{Binarized image }
+\end{figure}
+
+
+
+\subsection{Sobel Operator}
+Edge detection was manually implemented using the Sobel operator. The image was convolved with horizontal ($G_x$) and vertical ($G_y$) kernels:
+$$ G_x = \begin{bmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{bmatrix}, \quad G_y = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{bmatrix} $$
+$G_x$ detects vertical edges by finding horizontal gradients, while $G_y$ detects horizontal edges. The overall gradient magnitude was calculated as $G = \sqrt{G_x^2 + G_y^2}$, which highlights all edges in the image regardless of orientation.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{5-4.png} % Replace with your image name
+	\caption{Edge detection showing $G_x$, $G_y$.}
+	\label{fig:sobelGxGy}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{5-5.png} % Replace with your image name
+	\caption{The combined gradient $G$.}
+	\label{fig:sobel}
+\end{figure}
+
+\section{Image segmentation}
+\subsection{K-means}
+	An image is essentially a collection of pixels. In a color image, each pixel is a point in 3D space defined by its \var{R,G,B} color values.
+	We want to group these pixels into 𝐾
+	\textit{clusters} such that pixels in the same cluster have similar colors.
+	 Every pixel in the image is assigned to the nearest centroid based on the Euclidean distance between their color values. Once all pixels are assigned, the new center of each cluster is recalculated by taking the average color of all pixels currently assigned to that cluster.
+	 \begin{figure}[H]
+	 	\centering
+	 	\includegraphics[width=0.8\textwidth]{6-1.png} % Replace with your image name
+	 	\caption{Image segmentation with K-means method($K = 3$).}
+	 \end{figure}
+	 \subsection{Otsu's method}
+	 The algorithm assumes that the image contains two classes of pixels: foreground and background. It aims to find a threshold level \var{k} hat partitions the grayscale histogram into these two classes such that the variance between the two classes is maximized.
+	 	 \begin{figure}[H]
+	 	\centering
+	 	\includegraphics[width=\textwidth]{6-2.png} % Replace with your image name
+	 	\caption{Image segmented into foreground and background.}
+	 \end{figure}
+	 \subsection{Comparison: K-means and Otsu}
+	 \begin{enumerate}
+		\item \textbf{Sensitivity to initial values:} K-means depends on the initial cluster centers and may converge to different results on different runs. Otsu doesn't need any initial values.
+		\item \textbf{Number of Segments:} K-means, can determine \var{K} segments, where it is chosen by user. Otsu method is for binary segmentation, foreground and background.  
+		\item \textbf{Compatible with color images:} K-means works with both grayscale and color images. Otsu method is most commonly used for grayscale images.
+		\item \textbf{Timing and Performance:} Otsu is usually faster and simpler because it only computes one optimal threshold from the histogram. Very efficient for binary segmentation.
+	 \end{enumerate}
+	 
+	 \section{Voting Simulation}
+	 
+	 \begin{figure}[H]
+	 	\centering
+	 	
+	 	\begin{subfigure}{0.24\textwidth}
+	 		\centering
+	 		\includegraphics[width=\linewidth]{7-1.jpg}
+	 		\caption{iteration 1}
+	 	\end{subfigure}\hfill
+	 	\begin{subfigure}{0.24\textwidth}
+	 		\centering
+	 		\includegraphics[width=\linewidth]{7-2.jpg}
+	 		\caption{iteration 561 }
+	 	\end{subfigure}\hfill
+	 	\begin{subfigure}{0.24\textwidth}
+	 		\centering
+	 		\includegraphics[width=\linewidth]{7-3.jpg}
+	 		\caption{Iteration 1231}
+	 	\end{subfigure}\hfill
+	 	\begin{subfigure}{0.24\textwidth}
+	 		\centering
+	 		\includegraphics[width=\linewidth]{7-4.jpg}
+	 		\caption{Iteration 2000}
+	 	\end{subfigure}
+	 	
+	 	\caption{Voting Simulation. In different iterations. It seems like it goes from complete chaos to a more stable point as iterations pass.}
+	 	\label{fig:four-in-a-row}
+	 \end{figure}
+	 
+	 \section{Functions in Detail}
+	 \subsection{K-Means Clustering Implementation}
+	 
+	 The function \var{segmentImage} performs image segmentation by clustering pixels in a multidimensional color space. The implementation follows the standard K-means algorithm approach:
+	 
+	 \begin{enumerate}
+	 	\item \textbf{Data Reshaping:} We transform the 2D/3D image into a 2D matrix of size $(N \times C)$, where $N = \text{rows} \times \text{cols}$ and $C$ is the number of channels (e.g., 3 for RGB). This allows us to treat each pixel as a single point in an $C$-dimensional space.
+	 	\begin{lstlisting}
+pixelList = reshape(img, rows * cols, channels);
+	 	\end{lstlisting}
+	 	
+	 	\item \textbf{Distance Calculation:} In each iteration, we calculate the Euclidean distance between every pixel and the $k$ current cluster centers using \var{pdist2}. This generates a distance matrix of size $(N \times k)$.
+	 	\begin{equation}
+	 		d(p, c) = \sqrt{\sum_{j=1}^{C} (p_j - c_j)^2}
+	 	\end{equation}
+	 	
+	 	\item \textbf{Assignment and Update:} 
+	 	\begin{itemize}
+	 		\item \textbf{Assignment:} Each pixel is assigned to the cluster with the minimum distance: \var{labels = min(distances, [], 2)}.
+	 		\item \textbf{Update:} The centroids are recalculated as the mean of all pixels assigned to that cluster. The check \var{if sum(labels == i) > 0} ensures we do not attempt to calculate the mean of an empty cluster.
+	 	\end{itemize}
+	 	
+	 	\item \textbf{Convergence Criteria:} We monitor the displacement of the centers between iterations using the Frobenius norm. If the centers shift by less than 0.1, the algorithm has converged, and we exit the loop early:
+	 	\begin{lstlisting}
+if norm(centers - oldCenters) < 0.1
+	break;
+end
+	 	\end{lstlisting}
+	 	
+	 	\item \textbf{Reconstruction:} Finally, we replace each pixel's original color with its corresponding cluster center and reshape the list back into the original image dimensions.
+	 \end{enumerate}
+	 
+	 \subsection{Otsu's Thresholding Implementation}
+	 
+	 The function \var{otsu\_segmentation} implements the Otsu method to determine an optimal global threshold by maximizing the between-class variance. The implementation follows these logical steps:
+	 
+	 \begin{enumerate}
+	 	\item \textbf{Data Preparation:} The input is cast to \var{double} to ensure precision during division operations. We calculate the normalized histogram (probability distribution) $p_i$ of the grayscale intensities:
+	 	\begin{lstlisting}
+[counts, ~] = imhist(uint8(grayImage));
+probs = counts / numPixels;
+	 	\end{lstlisting}
+	 	
+	 	\item \textbf{Cumulative Calculations:} We compute the cumulative sums of the probabilities ($\omega$) and the intensity values ($ \mu $) to allow for fast computation of class statistics for every possible threshold level $t$:
+	 	\begin{lstlisting}
+cumSum = cumsum(probs);
+cumMean = cumsum((0:255)' .* probs);
+	 	\end{lstlisting}
+	 	
+	 	\item \textbf{Class Statistics:} For a threshold $t$, the two classes (background and foreground) have probabilities $\omega_1(t)$ and $\omega_2(t)$, and means $\mu_1(t)$ and $\mu_2(t)$. We calculate these using:
+	 	\begin{equation}
+	 		\mu_1(t) = \frac{\sum_{i=0}^{t} i \cdot p_i}{\omega_1(t)}, \quad \mu_2(t) = \frac{\mu_{total} - \sum_{i=0}^{t} i \cdot p_i}{1 - \omega_1(t)}
+	 	\end{equation}
+	 	The term \var{eps} is added to the denominators to prevent division by zero in regions where the histogram may be empty.
+	 	
+	 	\item \textbf{Optimization:} We maximize the between-class variance:
+	 	\begin{equation}
+	 		\sigma_b^2(t) = \omega_1(t)\omega_2(t)[\mu_1(t) - \mu_2(t)]^2
+	 	\end{equation}
+	 	The index corresponding to the maximum variance is selected as the optimal threshold. Since MATLAB indices are 1-based (starting at 1) and intensity values are 0-based (starting at 0), we adjust the result:
+	 	\begin{lstlisting}
+[~, thresholdIndex] = max(betweenClassVariance);
+threshold = (thresholdIndex - 1) / 255;
+	 	\end{lstlisting}
+	 	
+	 	\item \textbf{Binarization:} Finally, the image is segmented using the calculated normalized threshold.
+	 \end{enumerate}
+	 
+	 \subsection{Voting Simulation System}
+
+	 \begin{enumerate}
+	 	\item \textbf{Neighbor Detection (\var{get\_neighbors}):}
+	 	This utility function defines the connectivity of the grid. It uses a 2D stencil approach to identify valid 8-connected neighbors for any given cell $(i, j)$.
+	 	\begin{lstlisting}
+directions = [-1, -1; -1, 0; -1, 1; 0, -1; 0, 1; 1, -1; 1, 0; 1, 1];
+	 	\end{lstlisting}
+	 	Boundary conditions are enforced by checking if the calculated neighbor indices $(ni, nj)$ fall within the range $[1, n]$.
+	 	
+	 	\item \textbf{Stochastic Dynamics (\var{voting\_simulation}):}
+	 	The core simulation logic mimics a \textit{voter model}. In each iteration:
+	 	\begin{itemize}
+	 		\item We select a subset of cells based on the parameter $k$, representing the intensity of interaction per iteration.
+	 		\item A randomly selected neighbor of the active cell adopts the active cell's \textit{vote} (state). 
+	 		This causes clusters of identical values to grow and compete, eventually leading to \textit{opinion islands}.
+	 	\end{itemize}
+	 	
+	 	\item \textbf{Visualization (\var{display\_votes}):}
+	 	To render the simulation, the integer-based \var{votes} grid is mapped into an RGB image. Each integer state (1, 2, or 3) corresponds to a specific row in a color definition matrix:
+	 	\begin{lstlisting}
+img(i, j, :) = colors(votes(i, j), :);
+	 	\end{lstlisting}
+	 \end{enumerate}
+	 
+\end{document}
