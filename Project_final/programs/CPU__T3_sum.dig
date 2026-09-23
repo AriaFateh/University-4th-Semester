@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>sum: all positive</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2890,0x2908,0x2a00,0x0421,0x7005,0x2190,0x0246,0x1c91,0x1d2f,0x33f9,0x2600,0x33ff)
+memory DMEM(16) = 0x0005;
+memory DMEM(17) = 0x0003;
+memory DMEM(18) = 0x000c;
+memory DMEM(19) = 0x0001;
+memory DMEM(20) = 0x0028;
+memory DMEM(21) = 0x0007;
+memory DMEM(22) = 0x0002;
+memory DMEM(23) = 0x001e;
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+0 0 0 0 0 0x0000 X X X X
+loop(i,200)
+C 0 0 0 0 X X X X X
+end loop
+# the program must have reached its final self-loop by now ...
+0 0 0 0 0 0x000b X X X X
+loop(i,5)
+C 0 0 0 0 X X X X X
+end loop
+# ... and must stay there
+0 0 0 0 0 0x000b X X X X
+0 0 0x0001 0 0x0000 X X X X 0x0064
+</dataString></testData></entry></elementAttributes><pos x="0" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>sum: mixed signs</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2890,0x2908,0x2a00,0x0421,0x7005,0x2190,0x0246,0x1c91,0x1d2f,0x33f9,0x2600,0x33ff)
+memory DMEM(16) = 0xfffb;
+memory DMEM(17) = 0x0003;
+memory DMEM(18) = 0xfff4;
+memory DMEM(19) = 0x0001;
+memory DMEM(20) = 0xffd8;
+memory DMEM(21) = 0x0007;
+memory DMEM(22) = 0xfffe;
+memory DMEM(23) = 0x001e;
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+0 0 0 0 0 0x0000 X X X X
+loop(i,200)
+C 0 0 0 0 X X X X X
+end loop
+# the program must have reached its final self-loop by now ...
+0 0 0 0 0 0x000b X X X X
+loop(i,5)
+C 0 0 0 0 X X X X X
+end loop
+# ... and must stay there
+0 0 0 0 0 0x000b X X X X
+0 0 0x0001 0 0x0000 X X X X 0xffee
+</dataString></testData></entry></elementAttributes><pos x="300" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>sum: all zero</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2890,0x2908,0x2a00,0x0421,0x7005,0x2190,0x0246,0x1c91,0x1d2f,0x33f9,0x2600,0x33ff)
+memory DMEM(16) = 0x0000;
+memory DMEM(17) = 0x0000;
+memory DMEM(18) = 0x0000;
+memory DMEM(19) = 0x0000;
+memory DMEM(20) = 0x0000;
+memory DMEM(21) = 0x0000;
+memory DMEM(22) = 0x0000;
+memory DMEM(23) = 0x0000;
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+0 0 0 0 0 0x0000 X X X X
+loop(i,200)
+C 0 0 0 0 X X X X X
+end loop
+# the program must have reached its final self-loop by now ...
+0 0 0 0 0 0x000b X X X X
+loop(i,5)
+C 0 0 0 0 X X X X X
+end loop
+# ... and must stay there
+0 0 0 0 0 0x000b X X X X
+0 0 0x0001 0 0x0000 X X X X 0x0000
+</dataString></testData></entry></elementAttributes><pos x="600" y="0"/></visualElement>
+  </visualElements>
+  <wires>
+  </wires>
+  <measurementOrdering/>
+</circuit>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>MOVI positive</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x28bf,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,1)
+C 0 0 0x0001 0 X X X X X
+end loop
+0 0 0x0001 0x0001 0 X X X 0x003f X
+</dataString></testData></entry></elementAttributes><pos x="0" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>MOVI negative (sign extended)</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x28c0,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,1)
+C 0 0 0x0001 0 X X X X X
+end loop
+0 0 0x0001 0x0001 0 X X X 0xffc0 X
+</dataString></testData></entry></elementAttributes><pos x="300" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>R0 is hard wired to zero</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x282a,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,1)
+C 0 0 0x0000 0 X X X X X
+end loop
+0 0 0x0001 0x0000 0 X X X 0x0000 X
+</dataString></testData></entry></elementAttributes><pos x="600" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>ADD</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2894,0x297b,0x0194,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,3)
+C 0 0 0x0003 0 X X X X X
+end loop
+0 0 0x0001 0x0003 0 X X X 0x000f X
+</dataString></testData></entry></elementAttributes><pos x="900" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>SUB</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2894,0x297b,0x0594,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,3)
+C 0 0 0x0003 0 X X X X X
+end loop
+0 0 0x0001 0x0003 0 X X X 0x0019 X
+</dataString></testData></entry></elementAttributes><pos x="1200" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>AND / OR / XOR</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x288c,0x290a,0x0994,0x0e14,0x1294,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,5)
+C 0 0 0x0005 0 X X X X X
+end loop
+0 0 0x0001 0x0005 0 X X X 0x0006 X
+</dataString></testData></entry></elementAttributes><pos x="1500" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>SHL</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2881,0x290f,0x1594,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,3)
+C 0 0 0x0003 0 X X X X X
+end loop
+0 0 0x0001 0x0003 0 X X X 0x8000 X
+</dataString></testData></entry></elementAttributes><pos x="0" y="120"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>SHR</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2881,0x290f,0x1494,0x290c,0x1994,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,5)
+C 0 0 0x0003 0 X X X X X
+end loop
+0 0 0x0001 0x0003 0 X X X 0x0008 X
+</dataString></testData></entry></elementAttributes><pos x="300" y="120"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>ADDI</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x288a,0x1d18,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,2)
+C 0 0 0x0002 0 X X X X X
+end loop
+0 0 0x0001 0x0002 0 X X X 0x0002 X
+</dataString></testData></entry></elementAttributes><pos x="600" y="120"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>flags: zero</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2887,0x2907,0x0595,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,3)
+C 0 0 0x0003 0 X X X X X
+end loop
+0 0 0x0001 0x0003 0 X X 0x0001 0x0000 X
+</dataString></testData></entry></elementAttributes><pos x="900" y="120"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>flags: negative and borrow</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2883,0x2905,0x0595,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,3)
+C 0 0 0x0003 0 X X X X X
+end loop
+0 0 0x0001 0x0003 0 X X 0x0006 0xfffe X
+</dataString></testData></entry></elementAttributes><pos x="1200" y="120"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>flags: signed overflow</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2881,0x290f,0x1494,0x0193,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,4)
+C 0 0 0x0003 0 X X X X X
+end loop
+0 0 0x0001 0x0003 0 X X 0x000d 0x0000 X
+</dataString></testData></entry></elementAttributes><pos x="1500" y="120"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>no .S means the flags never change</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2887,0x2907,0x0595,0x2a01,0x2a82,0x074a,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,6)
+C 0 0 0x0006 0 X X X X X
+end loop
+0 0 0x0001 0x0006 0 X X 0x0001 0xffff X
+</dataString></testData></entry></elementAttributes><pos x="0" y="240"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>LW and SW</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2890,0x2110,0x1d23,0x2511,0x33ff)
+memory DMEM(16) = 0x0061;
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,4)
+C 0 0 0 0 X X X X X
+end loop
+0 0 0x0001 0x0002 0x0011 X X X 0x0064 0x0064
+</dataString></testData></entry></elementAttributes><pos x="300" y="240"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>predicated execution (.EQ taken, .LT suppressed)</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2887,0x2907,0x0415,0x2981,0x41b2,0x2a01,0x8242,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,7)
+C 0 0 0 0 X X X X X
+end loop
+0 0 0x0001 0x0003 0 X X X 0x0008 X
+0 0 0x0001 0x0004 0 X X X 0x0001 X
+</dataString></testData></entry></elementAttributes><pos x="600" y="240"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>conditional branch taken and not taken</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2887,0x2907,0x0415,0x2980,0x7001,0x29bc,0x2a05,0xb001,0x2a81,0x33ff)
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+loop(i,10)
+C 0 0 0 0 X X X X X
+end loop
+0 0 0x0001 0x0003 0 X X X 0x0000 X
+0 0 0x0001 0x0005 0 X X X 0x0001 X
+</dataString></testData></entry></elementAttributes><pos x="900" y="240"/></visualElement>
+  </visualElements>
+  <wires>
+  </wires>
+  <measurementOrdering/>
+</circuit>

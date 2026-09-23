@@ -1,0 +1,218 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+
+
+
+\definecolor{sectioncolor}{RGB}{30,70,140}
+\definecolor{subsectioncolor}{RGB}{60,110,180}
+
+\titleformat{\section}
+{\Large\bfseries\color{sectioncolor}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{subsectioncolor}}
+{\thesubsection}{1em}{}
+
+\lstset{
+	language=Matlab,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue!70!black}\bfseries,
+	commentstyle=\color{green!50!black},
+	stringstyle=\color{red!70!black},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=10pt,
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false
+}
+
+
+\newtcbox{\var}{
+	on line,
+	colback=subsectioncolor!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	arc=3pt,
+	left=2pt,
+	right=2pt,
+	top=0.5pt,
+	bottom=0.5pt,
+	fontupper=\ttfamily
+}
+
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Computer Assignment 1}
+	\lhead{Signals and Systems }
+	\cfoot{\thepage}
+	
+	\section{Properties of the Continuous-Time Fourier Transform}
+	\subsection{Intro to Fourier Transform}
+	We load a sample sound signal to the workspace and then plot the FFT over frequencies.
+	\begin{lstlisting}
+load splat;
+y = y(1:8192);
+Y = fftshift(fft(y));
+	\end{lstlisting}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.85\textwidth]{1a.jpg}
+		\caption{FFT of signal y(t).}
+	\end{figure}
+	 
+	 \subsection{Conjugate of Fourier Transform}
+	 As we expected from theory the result sound is the time inverted signal.
+	 \begin{figure}[H]
+	 	\centering
+	 	\includegraphics[width = 0.85\textwidth]{1b.jpg}
+	 	\caption{Conjugate in Fourier space is the time reversal transform of $y(t)$.}
+	 \end{figure}
+	 \subsection{Magnitude or Phase?}
+	 After constructing \var{y2} and \var{y3} signals, we can say magnitude plays more crucial rule in the sound. 
+	 \subsection{Constructing $y_4(t) = y(2t)$}
+	 The result signal is compressed by factor 2 in time space. But in frequency, signal is expanded. Compare the following figure with the section 1.1 figure.
+	 \begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.85\textwidth]{1g.jpg}
+		\caption{FFT of y4(t)}
+	 \end{figure}
+	 \subsection{Expansion in time}
+	 We insert zeros between samples.
+	 \begin{lstlisting}
+x = zeros(2.*fs,1);
+n = 1:1:fs;
+x(2.*n) = y(n);
+	 \end{lstlisting}
+	 Then, with built-in function(\var{filter})
+	 \footnote{Filters are data processing techniques that can smooth out high-frequency fluctuations in data or remove periodic trends of a specific frequency from data. In MATLAB®, the filter function filters a vector of data x according to the following difference equation, which describes a tapped delay-line filter.
+	 $$a(1) y(n) = \sum_{m = 1}^{N_b} b(m) x(n-m+1) - \sum_{m = 2}^{N_a} a(m) y(n-m+1)$$}
+	 	 we obtain the interpolated signal. The result of FFT shows us that expansion in time is corresponds to compression in frequency. In \var{y5} lower frequencies has higher magnitude.
+	 \begin{lstlisting}
+h = [1 2 1]./2;
+y5 = filter(h, 1, x);
+Y5 = fftshift(fft(y5));
+	 \end{lstlisting}
+	 
+	 \begin{figure}
+	\centering
+	\includegraphics[width = 0.85\textwidth]{1i.jpg}
+	\caption{FFT of y5(t)}
+\end{figure}
+\section{Amplitude Modulation}
+	In the figure \eqref{dashdot}, dash and dot signals are plotted. These signals are used to construct the Morse code. In the figure \eqref{zsignal}, \var{z} is drawn using dash and dot.
+	
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.85\textwidth]{2a_1.jpg}
+		\caption{\var{dash} and \var{dot} signal which are used to construct the Morse code.}
+		\label{dashdot}
+	\end{figure}
+		\begin{figure}
+		\centering
+		\includegraphics[width = 0.85\textwidth]{2a_2.jpg}
+		\caption{Corresponding \var{Z} in the Morse code.}
+		\label{zsignal}
+	\end{figure}
+	
+	\subsection{Filter Characteristic}
+		The Bode plot of the filter is shown in figure \eqref{bode_plot}. The line of code that gives us the Bode plot is as follows. \var{bf} and \var{af} are the transfer function coefficients.
+		\begin{lstlisting}
+ferqs(bf, af);
+		\end{lstlisting}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.85\textwidth]{2b.jpg}
+		\caption{The filter Bode plot}
+		\label{bode_plot}
+	\end{figure}
+	\subsection{Applying the Filter on \var{dash} and \var{dot}}
+	After applying low-pass filter to dash and dot signals, the result is shown in figure \eqref{ydash_ydot}.
+	
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.75\textwidth]{2c.jpg}
+		\caption{Dash and Dot signals}
+		\label{ydash_ydot}
+	\end{figure}
+	\subsection{Modulation}
+	If we define a new signal, \var{y} as following equation, most of the energy of resulting signal would be out of the pass-band.
+	\begin{lstlisting}
+y = dash.*cos(2*pi*f1.*t(1:length(dash)));
+yo = lsim(bf,af,y,t(1:length(dash)));
+	\end{lstlisting}
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.75\textwidth]{2d.jpg}
+		\caption{Signals y and yo.}
+	\end{figure}
+	\subsection{Theory}
+	\begin{itemize}
+		\item 
+		$y_1 = m(t) \cos(2\pi f_1t)^2$ :
+		$$\cos(\omega_1 t)^2 = \frac12(1 + \cos(2 \omega_1 t))$$
+		$$\mathcal{F}(y_1(t)) = \frac12 M(j\omega) + \frac14 \left(M(j(\omega - 2\omega_1)) +M(j(\omega + 2\omega_1))\right)$$
+		\item 
+		$y_2(t) = m(t) \cos(\omega_1) \sin(\omega_1 t)$ :
+		$$y_2(t) = \frac12 m(t) \sin(2\omega_1 t)$$
+		$$\mathcal{F}\{y_2(t)\} = \frac{1}{4j} \left(M(j(\omega - 2\omega_1)) - M(j(\omega + 2\omega_1))\right)$$
+		\item 
+		$y_3(t) = m(t) \cos(\omega_1 t) \cos(\omega_2 t)$ :
+		$$y_3(t) = \frac12 m(t)\cos((\omega_1-\omega_2)t)+\frac12 m(t)\cos((\omega_1+\omega_2)t)$$
+		\begin{align*}
+		\mathcal{F}\{y_3(t)\} &=\frac14\Big[
+		M(j(\omega-(\omega_1-\omega_2)))+M(j(\omega+(\omega_1-\omega_2)))\\
+		+&M(j(\omega-(\omega_1+\omega_2)))+M(j(\omega+(\omega_1+\omega_2)))
+		\Big]	
+		\end{align*}
+	\end{itemize}
+	\subsection{Extracting Messages}
+	After multiplying $\cos(\omega_1 t)$, we apply the filter and as it is already calculated,
+	$$LPF\{x(t) \cos(\omega_1 t)\} = \frac12 m_1(t).$$
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.75\textwidth]{m1.jpg}
+		\caption{The first letter of the message(\var{m1}). }
+	\end{figure}
+	Then with similar methods, \var{m2} and \var{m3} are obtained.
+	\begin{lstlisting}
+m1 = 2.*lsim(bf,af,x.*cos(2*pi*f1.*t(1:length(x))),t(1:length(x)));
+m2 = 2.*lsim(bf,af,x.*sin(2*pi*f2.*t(1:length(x))),t(1:length(xo)));
+m3 = 2.*lsim(bf,af,x.*sin(2*pi*f1.*t(1:length(x))),t(1:length(xo)));
+	\end{lstlisting}
+			\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.75\textwidth]{m.jpg}
+		\caption{Demodulated message.}
+	\end{figure}
+	
+\end{document}

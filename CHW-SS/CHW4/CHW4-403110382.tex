@@ -1,0 +1,265 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+
+
+
+\definecolor{sectioncolor}{RGB}{30,70,140}
+\definecolor{subsectioncolor}{RGB}{60,110,180}
+
+\titleformat{\section}
+{\Large\bfseries\color{sectioncolor}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{subsectioncolor}}
+{\thesubsection}{1em}{}
+
+\lstset{
+	language=Matlab,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue!70!black}\bfseries,
+	commentstyle=\color{green!50!black},
+	stringstyle=\color{red!70!black},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=10pt,
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false
+}
+
+
+\newtcbox{\var}{
+	on line,
+	colback=subsectioncolor!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	arc=3pt,
+	left=2pt,
+	right=2pt,
+	top=0.5pt,
+	bottom=0.5pt,
+	fontupper=\ttfamily
+}
+
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Computer Assignment 3}
+	\lhead{Signals and Systems}
+	\cfoot{\thepage}
+	
+	\section{Laplace Transform}
+	\subsection{Introduction}
+		In the first part, we have an RLC circuit with varying resistor. The transfer function changes due the value of the resistor(\var{R}).
+		In the next part, we analyze an unity-feedback control system. Different \var{K} gives us different characteristics.
+		
+	\subsection{RLC Circuit}
+	\subsubsection{MATLAB Code}
+	
+	\begin{lstlisting}
+%Constants:
+C = 1;
+L = 1;
+R = [0.5, 2, 5];
+%Define Transfer Function
+for i=1:3
+	sys(i) = tf(1, [1 , R(i),1]);
+end
+%Plot Bode Diagram
+for i=1:3
+	figure;
+	bode(sys(i));
+	grid("on");
+end
+	\end{lstlisting}
+	\subsubsection{Result}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{1-1-0.5.jpg}
+		\caption{Transfer Function for $R = 0.5 \, \Omega$}
+		\label{1-1-0.5}
+	\end{figure}
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{1-1-2.jpg}
+		\caption{Transfer Function for $R = 2 \, \Omega$}
+		\label{1-1-2}
+	\end{figure}
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{1-1-5.jpg}
+		\caption{Transfer Function for $R = 5 \, \Omega$}
+		\label{1-1-5}
+	\end{figure}
+	
+	
+	As it is shown in Figure \ref{1-1-0.5}, \ref{1-1-2} and \ref{1-1-5}, the filter is \var{Low-Pass}. The magnitude goes to zero as frequency increases. The cut-off frequency (and \var{Q}) decreases as we increase the resistor value.  \var{Q} shows how wide our bandwidth is. It is a quality factor for the filter.
+	
+	 But for a small resistor, the characteristic is different. At frequency $\omega_\circ$, magnitude rapidly increases and creates a peak (Figure \ref{RCL_SmallR}). 
+	 
+	 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{RCL_smallR.jpg}
+		\caption{Transfer Function for $R = 0.01 \, \Omega$}
+		\label{RCL_SmallR}
+	\end{figure}
+	
+	\subsection{Closed-loop Control System Stability}
+	\subsubsection{MATLAB Code}
+	\begin{lstlisting}
+K = [0.5, 1, 4, 9];
+%Feedback and rlocus plot
+for i=1:length(K)
+	G(i) = tf(K(i), [1, 2, 0]);		 
+	unity = tf(1,1);  				 %Unity filter
+	sys(i) = feedback(G(i), unity);  %feedback
+	figure;
+	rlocus(sys(i));	
+end
+%Bode plot
+for i=1:length(K)
+	figure;
+	bode(sys(i));grid on;
+end
+	\end{lstlisting}
+	
+	\subsubsection{Result}
+	If roots are in the left-side plane, system is stable. Due to the Figure \ref{rlocusPlot}, they are all stable.
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{rlocus.jpg}
+		\caption{Root Locus plots for different \var{K}}
+		\label{rlocusPlot}
+	\end{figure}
+	There are three different type:
+	\begin{itemize}
+		\item 
+		Over-damped: Two roots are real and negative.
+		\item 
+		Under-damped: Two roots are complex and have negative real part.
+		\item 
+		Critically-damped: There is only one negative real root.
+	\end{itemize}
+	By this definition, \var{K=4} and \var{K = 9} are under-damped. \var{K=1} is critically damped. \var{K = 0.5} is over-damped.
+	Bode diagram of each \var{K} are shown in Figure \ref{bodeDiagramsK}.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = \textwidth]{bodeDiagrams.jpg}
+		\caption{Bode plot for different \var{K}}
+		\label{bodeDiagramsK}
+	\end{figure}
+	
+	\section{Z-Transform}
+	\subsection{Moving Average}
+	\subsubsection{Theory}
+	The N-point moving average filter is defined as:
+	\begin{equation}
+		y[n] = \frac1N \sum_{k=0}^{N-1} x[n-k]
+	\end{equation}
+	We take the Z-transform of both sides of the equation.
+	\begin{equation}
+		Y(z) = \frac1N \sum_{k = 0}^{N-1} z^{-k} X(z)
+	\end{equation}
+	\begin{equation}
+		H(z) = \frac1N \sum_{k = 0}^{N-1} z^{-k} = \frac1N \frac{1-z^{-N}}{1-z^{-1}}
+	\end{equation}
+	If you input an impulse $\delta[n]$ into the system, the coefficient of the sum dictate that output will be $\frac1N$ for $n = 0, \cdots, N-1$ and $0$ for everywhere else. Because this impulse response has a finite duration, it is by definition an FIR filter.
+	
+	\subsubsection{Code}
+	\begin{lstlisting}
+N = [3,7,15];
+figure;
+for i=1:length(N)
+	n = N(i);
+	numerator = zeros(1 , n+1);
+	denominator = zeros(1,n+1);
+	numerator(1) =  1./n;numerator(n+1) = -1./n;
+	denominator(1) = 1; denominator(2) = -1;
+
+	subplot(1,length(N),i);
+	zplane(numerator,denominator);
+end
+	\end{lstlisting}
+	\subsubsection{Result}
+		In the Figure \ref{zplane}, zero-pole plot is shown. Zeros are distributed uniformly around the unit circle. We have a zero and a pole at $z=1$. They perfectly cancel each other out. In reality, the system does not have a pole at $z=1$.
+		
+		Whenever the unit circle passes through a zero, the frequency response drops completely to zero. Because your zeros are at $\omega = \frac{2\pi k}{N}$, the filter will completely block those specific frequencies (and their harmonics).
+		
+		The $(N-1)$ poles at $(0,0)$ do not change the magnitude of the frequency response because their distance to any point on the unit circle is always exactly $1$. They only introduce a linear time delay to the signal.
+		
+		Because the zero at $z=1$ (which corresponds to DC, or $\omega=0$) was canceled by the pole, there is no zero there to attenuate the signal. The magnitude response is at its absolute maximum at $\omega=0$.
+		
+		In the frequency domain, an $N$-point moving average filter produces a \var{sinc}-like shape (Take a look at Figure \ref{frequency}). Due to the figure, it is a low-pass filter. Increasing \var{N} will produce more zeros in Figure \ref{frequency}(The number of roots is $[N/2]$). 
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width = \textwidth]{zplane.jpg}
+		\caption{Zero-Pole plot for a moving average filter with different \var{N}}
+		\label{zplane}
+	\end{figure}
+
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width = \textwidth]{frequencyResponse.jpg}
+	\caption{Frequency Response for a moving average filter with different \var{N}}
+	\label{frequency}
+	\end{figure}
+	\subsubsection{Application}
+	As it is shown in Figure \ref{filterNoise}, moving average reduces random noise. 
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width = \textwidth]{filterNoise.jpg}
+		\caption{Moving Average reduces random noise.}
+		\label{filterNoise}
+		\end{figure}
+		
+	\subsection{Inverse Via Partial Fractions}
+	For a system to be BIBO stability requires all poles to lie strictly inside the unit circle in the z‑plane so, this system is BIBO due to the Figure \ref{HPoleZero}.
+	\subsubsection{Pole-Zero Plot}
+			\begin{figure}[H]
+		\centering
+		\includegraphics[width = \textwidth]{HzeroPole.jpg}
+		\caption{Zero-Pole plot of the transfer function. }
+		\label{HPoleZero}
+	\end{figure}
+	After applying \var{iztrans},
+	\begin{equation}
+	h[n] = \frac{{{\left(-1\right)}}^n \,\cos \left(\frac{3\,\pi \,n}{4}\right)}{2^{n/2} }
+	\end{equation}
+	As it is shown in Figure \ref{transferFunctionH}, sum over \var{n} would be finite so, the system is BIBO.
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width = \textwidth]{transferFunction.jpg}
+		\caption{}
+		\label{transferFunctionH}
+	\end{figure}
+\end{document}
+

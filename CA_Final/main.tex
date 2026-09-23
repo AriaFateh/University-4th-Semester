@@ -1,0 +1,79 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+
+\usepackage{xepersian}
+\settextfont[
+Path=../,
+Extension=.ttf,
+UprightFont=XB Niloofar,
+BoldFont=XB NiloofarBd,
+ItalicFont=XB NiloofarIt,
+BoldItalicFont=XB NiloofarBdIt
+]{XB Niloofar}
+
+
+% اطلاعات دانشجو
+\newcommand{\studentname}{آریا فاتح کرداری}
+\newcommand{\studentid}{403110382}
+\newcommand{\coursename}{ساختار کامپیوتر }
+\newcommand{\homeworknum}{}
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\studentname \quad \studentid}
+\rhead{امتحان پایانترم \homeworknum - \coursename}
+\cfoot{\thepage}
+
+
+\begin{document}
+
+% لوگو و اطلاعات اولیه
+\begin{center}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.2\textwidth]{images/logo.png}        
+    \end{figure}
+    \vspace{1cm}
+    \textbf{\Large امتحان پایانترم \homeworknum} \\
+    \textbf{\Large \coursename} \\
+    \vspace{0.5cm}
+    \textbf{\large نام: \studentname} \\
+    \textbf{\large شماره دانشجویی: \studentid} \\
+    \vspace{0.5cm}
+
+    \today
+        \vspace{0.5cm}
+    \hrule
+    \vspace{1cm}
+\end{center}
+
+\section{سوال اول}
+\subsection{الف}
+اگر از معماری فون نویمان استفاده شود، پردازنده کجبور است در یک سایکل دو درخواست همزمان به حافظه بفرست که امکان پذیر نیست. 
+\subsection{ب}
+اگر دستورات پرشی داشته باشیم که اجزاه تغییر Flag ها را داشته باشند، وضعیت اجرای برنامه های شرطی به شدت پیچیده و ناپایدار میشود. 
+ما اغلب یک دستور مقایسه ای داریم و سپس وضیعت Flag را مشخص میکنیم و چند دستور پرش بعدی با توجه به وضعیت Flag انجام میشود که اگر قرار باشد هر دستور پرش مقدار Flag‌را تغییر بدهد، مقدار Flag بازنویسی شده به مشکل بر میخورد. 
+
+\subsection{ج}
+این مدار باید در پین \lr{Write Enable} مربوط به پایه صفر در رجیستر فایل باشد. به این شکل که سیگنال کنترلی \lr{RegWrite} را به نوعی کنترل بکند که تنها در صورتی یک شود که آدرس نوشتن صفر نباشد. میتواند با یک مقایسه گر که 0 را با آدرس نوشتن مقایسه میکند و خروجی آن را به \lr{RegWrite} به And وصل میکنیم.
+اگر مدار محافظ وجود نداشته باشد مقدار R0 تغییر کرده و آنگاه به دلیل اینکه بقیه دستور ها با توجه به این نوشته شدند که مقدار R0 همواره صفر است تحت تاثیر قرار میگیرند.
+
+\section{سوال دوم}
+
+\begin{enumerate}
+		\item \textbf{\lr{RegWrite}:}
+		دستور SUB نتیجه را در رجیستر فایل باید بنویسد و به دلیل اینکه بدون شرط است، مقدارش 1 میباشد.
+		\item \textbf{\lr{RegDst}}
+		با توجه به مطالب گفته شده مقدار \lr{R2} آدرس را مشخص میکند.
+		\item \textbf{ورودی های ALU:}
+		$A= 10 \, \, B = 3$.
+		 ورودی A هموارهمقدار ریجیستر Rs1 است. به دلیل صفر بودن ALUsrc در فرمت R، ورودی B‌نیز RS2 است.
+		 \item \textbf{مقدار ALU}
+\end{enumerate}
+\end{document}
+

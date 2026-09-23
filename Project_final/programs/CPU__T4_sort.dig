@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>sort: random</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2890,0x2908,0x1d2f,0x0421,0x700e,0x0190,0x0314,0x043d,0xb001,0x33f8,0x2230,0x22b1,0x0459,0xb001,0x3002,0x26b0,0x2631,0x1db1,0x33f4,0x33ff)
+memory DMEM(16) = 0x002a;
+memory DMEM(17) = 0xfff9;
+memory DMEM(18) = 0x0000;
+memory DMEM(19) = 0x0384;
+memory DMEM(20) = 0x0005;
+memory DMEM(21) = 0x0005;
+memory DMEM(22) = 0xffff;
+memory DMEM(23) = 0x0080;
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+0 0 0 0 0 0x0000 X X X X
+loop(i,1200)
+C 0 0 0 0 X X X X X
+end loop
+# the program must have reached its final self-loop by now ...
+0 0 0 0 0 0x0013 X X X X
+loop(i,5)
+C 0 0 0 0 X X X X X
+end loop
+# ... and must stay there
+0 0 0 0 0 0x0013 X X X X
+0 0 0x0001 0 0x0010 X X X X 0xfff9
+0 0 0x0001 0 0x0011 X X X X 0xffff
+0 0 0x0001 0 0x0012 X X X X 0x0000
+0 0 0x0001 0 0x0013 X X X X 0x0005
+0 0 0x0001 0 0x0014 X X X X 0x0005
+0 0 0x0001 0 0x0015 X X X X 0x002a
+0 0 0x0001 0 0x0016 X X X X 0x0080
+0 0 0x0001 0 0x0017 X X X X 0x0384
+</dataString></testData></entry></elementAttributes><pos x="0" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>sort: already sorted</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2890,0x2908,0x1d2f,0x0421,0x700e,0x0190,0x0314,0x043d,0xb001,0x33f8,0x2230,0x22b1,0x0459,0xb001,0x3002,0x26b0,0x2631,0x1db1,0x33f4,0x33ff)
+memory DMEM(16) = 0x0001;
+memory DMEM(17) = 0x0002;
+memory DMEM(18) = 0x0003;
+memory DMEM(19) = 0x0004;
+memory DMEM(20) = 0x0005;
+memory DMEM(21) = 0x0006;
+memory DMEM(22) = 0x0007;
+memory DMEM(23) = 0x0008;
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+0 0 0 0 0 0x0000 X X X X
+loop(i,1200)
+C 0 0 0 0 X X X X X
+end loop
+# the program must have reached its final self-loop by now ...
+0 0 0 0 0 0x0013 X X X X
+loop(i,5)
+C 0 0 0 0 X X X X X
+end loop
+# ... and must stay there
+0 0 0 0 0 0x0013 X X X X
+0 0 0x0001 0 0x0010 X X X X 0x0001
+0 0 0x0001 0 0x0011 X X X X 0x0002
+0 0 0x0001 0 0x0012 X X X X 0x0003
+0 0 0x0001 0 0x0013 X X X X 0x0004
+0 0 0x0001 0 0x0014 X X X X 0x0005
+0 0 0x0001 0 0x0015 X X X X 0x0006
+0 0 0x0001 0 0x0016 X X X X 0x0007
+0 0 0x0001 0 0x0017 X X X X 0x0008
+</dataString></testData></entry></elementAttributes><pos x="300" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>sort: reverse sorted</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2890,0x2908,0x1d2f,0x0421,0x700e,0x0190,0x0314,0x043d,0xb001,0x33f8,0x2230,0x22b1,0x0459,0xb001,0x3002,0x26b0,0x2631,0x1db1,0x33f4,0x33ff)
+memory DMEM(16) = 0x0008;
+memory DMEM(17) = 0x0007;
+memory DMEM(18) = 0x0006;
+memory DMEM(19) = 0x0005;
+memory DMEM(20) = 0x0004;
+memory DMEM(21) = 0x0003;
+memory DMEM(22) = 0x0002;
+memory DMEM(23) = 0x0001;
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+0 0 0 0 0 0x0000 X X X X
+loop(i,1200)
+C 0 0 0 0 X X X X X
+end loop
+# the program must have reached its final self-loop by now ...
+0 0 0 0 0 0x0013 X X X X
+loop(i,5)
+C 0 0 0 0 X X X X X
+end loop
+# ... and must stay there
+0 0 0 0 0 0x0013 X X X X
+0 0 0x0001 0 0x0010 X X X X 0x0001
+0 0 0x0001 0 0x0011 X X X X 0x0002
+0 0 0x0001 0 0x0012 X X X X 0x0003
+0 0 0x0001 0 0x0013 X X X X 0x0004
+0 0 0x0001 0 0x0014 X X X X 0x0005
+0 0 0x0001 0 0x0015 X X X X 0x0006
+0 0 0x0001 0 0x0016 X X X X 0x0007
+0 0 0x0001 0 0x0017 X X X X 0x0008
+</dataString></testData></entry></elementAttributes><pos x="600" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>sort: all equal</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2890,0x2908,0x1d2f,0x0421,0x700e,0x0190,0x0314,0x043d,0xb001,0x33f8,0x2230,0x22b1,0x0459,0xb001,0x3002,0x26b0,0x2631,0x1db1,0x33f4,0x33ff)
+memory DMEM(16) = 0x0004;
+memory DMEM(17) = 0x0004;
+memory DMEM(18) = 0x0004;
+memory DMEM(19) = 0x0004;
+memory DMEM(20) = 0x0004;
+memory DMEM(21) = 0x0004;
+memory DMEM(22) = 0x0004;
+memory DMEM(23) = 0x0004;
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+0 0 0 0 0 0x0000 X X X X
+loop(i,1200)
+C 0 0 0 0 X X X X X
+end loop
+# the program must have reached its final self-loop by now ...
+0 0 0 0 0 0x0013 X X X X
+loop(i,5)
+C 0 0 0 0 X X X X X
+end loop
+# ... and must stay there
+0 0 0 0 0 0x0013 X X X X
+0 0 0x0001 0 0x0010 X X X X 0x0004
+0 0 0x0001 0 0x0011 X X X X 0x0004
+0 0 0x0001 0 0x0012 X X X X 0x0004
+0 0 0x0001 0 0x0013 X X X X 0x0004
+0 0 0x0001 0 0x0014 X X X X 0x0004
+0 0 0x0001 0 0x0015 X X X X 0x0004
+0 0 0x0001 0 0x0016 X X X X 0x0004
+0 0 0x0001 0 0x0017 X X X X 0x0004
+</dataString></testData></entry></elementAttributes><pos x="900" y="0"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>sort: extremes</string></entry><entry><string>Testdata</string><testData><dataString>CLK RESET DBG_EN DBG_RSEL DBG_MADDR PC_OUT IR_OUT FLAGS_OUT DBG_ROUT DBG_MOUT
+
+program(0x2890,0x2908,0x1d2f,0x0421,0x700e,0x0190,0x0314,0x043d,0xb001,0x33f8,0x2230,0x22b1,0x0459,0xb001,0x3002,0x26b0,0x2631,0x1db1,0x33f4,0x33ff)
+memory DMEM(16) = 0x03e8;
+memory DMEM(17) = 0xfc18;
+memory DMEM(18) = 0x03e7;
+memory DMEM(19) = 0xfc19;
+memory DMEM(20) = 0x0000;
+memory DMEM(21) = 0x0001;
+memory DMEM(22) = 0xffff;
+memory DMEM(23) = 0x01f4;
+
+0 0x0001 0 0 0 X X X X X
+C 0x0001 0 0 0 X X X X X
+0 0 0 0 0 0x0000 X X X X
+loop(i,1200)
+C 0 0 0 0 X X X X X
+end loop
+# the program must have reached its final self-loop by now ...
+0 0 0 0 0 0x0013 X X X X
+loop(i,5)
+C 0 0 0 0 X X X X X
+end loop
+# ... and must stay there
+0 0 0 0 0 0x0013 X X X X
+0 0 0x0001 0 0x0010 X X X X 0xfc18
+0 0 0x0001 0 0x0011 X X X X 0xfc19
+0 0 0x0001 0 0x0012 X X X X 0xffff
+0 0 0x0001 0 0x0013 X X X X 0x0000
+0 0 0x0001 0 0x0014 X X X X 0x0001
+0 0 0x0001 0 0x0015 X X X X 0x01f4
+0 0 0x0001 0 0x0016 X X X X 0x03e7
+0 0 0x0001 0 0x0017 X X X X 0x03e8
+</dataString></testData></entry></elementAttributes><pos x="1200" y="0"/></visualElement>
+  </visualElements>
+  <wires>
+  </wires>
+  <measurementOrdering/>
+</circuit>

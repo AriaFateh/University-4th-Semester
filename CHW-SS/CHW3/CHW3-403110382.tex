@@ -1,0 +1,224 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+
+
+
+\definecolor{sectioncolor}{RGB}{30,70,140}
+\definecolor{subsectioncolor}{RGB}{60,110,180}
+
+\titleformat{\section}
+{\Large\bfseries\color{sectioncolor}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{subsectioncolor}}
+{\thesubsection}{1em}{}
+
+\lstset{
+	language=Matlab,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue!70!black}\bfseries,
+	commentstyle=\color{green!50!black},
+	stringstyle=\color{red!70!black},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=10pt,
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false
+}
+
+
+\newtcbox{\var}{
+	on line,
+	colback=subsectioncolor!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	arc=3pt,
+	left=2pt,
+	right=2pt,
+	top=0.5pt,
+	bottom=0.5pt,
+	fontupper=\ttfamily
+}
+
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Computer Assignment 3}
+	\lhead{Signals and Systems}
+	\cfoot{\thepage}
+	
+	\section{DFT Algorithm Implementation}
+	\subsection{Implementation}
+	\subsubsection{Loop}
+	It is implemented in \var{myDFTLoop} function. It is directly obtained by the following formula,
+	\begin{equation}
+		X[k] = \sum_{n =0}^{N-1} x[n] \, e^{-j \frac{2\pi}{N} k n}
+	\end{equation}
+	Which $N$ is the array's size.
+	
+	\begin{lstlisting}
+function X = myDFTLoop(x)
+	N = length(x);
+	X = zeros(N,1);
+	for k=1:N
+		for i = 0:N-1
+			X(k) = X(k) + x(i+1).*exp(-1j.*2*pi./N.*(k-1).*i);
+		end
+	end
+end
+	\end{lstlisting}
+		
+\subsubsection{Matrix}
+First we construct a matrix (\var{W}) which DFT array of \var{x} is calculated by $W x$. 
+\begin{lstlisting}
+function X = myDFTMatrix(x)
+	N = length(x);
+	X = zeros(N , 1);
+	n = 0:N-1;
+	W = exp(-1j * 2 *pi / N *(n'*n));
+	X = W * x(:);
+end
+\end{lstlisting}
+\subsection{Norm Difference}
+For a random sequence of numbers with size 256, we calculate DFT with two mentioned functions. Norm-2 of difference of the implemented and built-in function shows how accurate our calculations is.
+The order of magnitude of the error is $10^{-12}$. 
+\subsection{Time-Complexity}
+The figure \eqref{DFT_Comparison} shows, FFT algorithm is meaningfully fast, two and four order of magnitude faster than the matrix and loop implementation respectively. In the figure \eqref{DFT_Comparison_loglog} the performance of each method is more clear and readable. The time-complexity of loop and matrix are both $\mathcal{O}(N^2)$ but FFT is $\mathcal{O}(N \log{N})$.
+\begin{figure}
+	\centering
+	\includegraphics[width = 0.85 \textwidth]{1-2-d.jpg}
+	\caption{Different DFT Implementations Time Profile. }
+	\label{DFT_Comparison}
+\end{figure}
+\begin{figure}
+		\centering
+		\includegraphics[width = 0.7\textwidth]{1-2-e.jpg}
+		\caption{Different DFT Implementations Time-Profile. In the log-log plot. }
+		\label{DFT_Comparison_loglog}
+\end{figure}
+
+\section{Spectral Sampling}
+	\subsection{Effect of the Observation Window Duration}
+	As it is shown in figure \eqref{FFT_smallT}, two frequencies are not distinguishable from each other. The duration is to low for distinguish two peaks. .Zero-padding doesn't help it as it is shown in figure \eqref{FFT_zeropadding}. Data points in frequency space is increased due to the zero-padding. 
+	
+	Two different peaks are now distinguishable due to the increase in observing duration. Look at the figure \eqref{FFT_bigT}.
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{2-1-a.jpg}
+		\caption{The FFT of $x(t)$‌ with $f_s$ ‌sampling rate.T=0.1 s}
+		\label{FFT_smallT}
+	\end{figure}
+		\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{2-1-b.jpg}
+		\caption{The FFT of $x(t)$ with zero-padding.}
+		\label{FFT_zeropadding}
+	\end{figure}
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.85\textwidth]{2-1-c.jpg}
+		\caption{The DFT of the signal with $T=0.5\, s$. Observing Duration affects the resolution in frequency domain.}
+		\label{FFT_bigT}
+	\end{figure}
+	
+	\subsection{Spectral Leakage}
+	The DFT assumes that the finite sequence it analyzes is one period of an infinitely periodic signal. Your observation window is 	$T=0.2$ seconds. For $f_1=100 \, \text{Hz}$, the window contains exactly 20 cycles, so it aligns perfectly. However, for $f_2 = 123.5 \, \text{Hz}$, the window contains exactly 24.7 cycles. Because this is not an integer number of cycles, wrapping the end of the signal back to the beginning creates an abrupt, artificial discontinuity. It is shown in figure \eqref{Leakage}.
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{2-2-d.jpg}
+		\caption{Sloped skirt due to the uncompleted cycles.}
+		\label{Leakage}
+	\end{figure}
+	\subsection{Hann and Hamming Window}
+	The result is shown in figure \eqref{Hann_Hamming}. The rectangular window gives us better frequency resolution but these filter suppress the spectral leakage and produce cleaner spectra.
+		\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{2-2-e.jpg}
+		\caption{FFT of the signal after applying Hann and Hamming filter.}
+		\label{Hann_Hamming}
+	\end{figure}
+	
+	
+	\section{Circular and Linear Convolution}
+	\subsection{Linear Convolution}
+	We define two given sequence manually and then obtain the linear convolution. The result is shown in figure \eqref{linearConv}.
+		\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{3-1-a.jpg}
+		\caption{Convolution of \var{x[n]} and \var{h[n]} sequences.}
+		\label{linearConv}
+	\end{figure}
+	\subsection{Circular Convolution}
+	Since the linear convolution has length (L+M-1=13), an (N=8) circular convolution is too short to contain all samples. Consequently, the last (13-8=5) samples wrap around and are added to the first five samples, producing time-domain aliasing(figure \label{CircularConv}).
+	
+			\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{3-1-c.jpg}
+		\caption{Circular convolution and aliasing effect.}
+		\label{CicularConv}
+	\end{figure}
+	
+	\section{2-D DFT}
+	\subsection{Binary image}
+	The image varies only along the horizontal direction, so its spectrum contains energy concentrated along the horizontal frequency axis(figure \eqref{BinaryImage}).
+				\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{5-1-a.jpg}
+		\caption{Binary image and its DFT.}
+		\label{BinaryImage}
+	\end{figure}
+	\subsection{Rectangular Pulse}
+	The Fourier transform of a rectangular pulse is a sinc function. Since the square is rectangular in both dimensions, the spectrum becomes the product of two sinc functions, producing a characteristic cross-shaped pattern.
+					\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{5-1-b.jpg}
+		\caption{Rectangular pulse}
+		\label{Rectangular}
+	\end{figure}
+	
+	\subsection{Image processing}
+	The periodic cosine introduces two strong conjugate impulses in the frequency domain. These impulses appear as sharp peaks away from the DC component and are easily identifiable in the surface plot(figures \ref{CenteredSpectrum} \& \ref{3dSpectrum}).
+	
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{5-2-c.jpg}
+		\caption{Centered Spectrum of the noisy image.}
+		\label{CenteredSpectrum}
+	\end{figure}
+		\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\textwidth]{5-2-d.jpg}
+		\caption{3-D Spectrum of the noisy image.}
+		\label{3dSpectrum}
+	\end{figure}
+\end{document}
+

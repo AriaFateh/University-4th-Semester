@@ -1,0 +1,206 @@
+% --------------------------------------------------
+%         LÄS INSTRUKTIONER I titelsida.tex
+% --------------------------------------------------
+
+
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{enumitem}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\usepackage{pgfplots} % For more advanced plots
+\pgfplotsset{compat=1.18} % Set version for consistency
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+
+
+
+\definecolor{sectioncolor}{RGB}{30,70,140}
+\definecolor{subsectioncolor}{RGB}{60,110,180}
+
+\titleformat{\section}
+{\Large\bfseries\color{sectioncolor}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{subsectioncolor}}
+{\thesubsection}{1em}{}
+
+\lstset{
+	language=Matlab,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue!70!black}\bfseries,
+	commentstyle=\color{green!50!black},
+	stringstyle=\color{red!70!black},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=10pt,
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false
+}
+
+
+\newtcbox{\var}{
+	on line,
+	colback=subsectioncolor!15,
+	colframe=gray!15,
+	boxrule=0pt,
+	arc=3pt,
+	left=2pt,
+	right=2pt,
+	top=0.5pt,
+	bottom=0.5pt,
+	fontupper=\ttfamily
+}
+
+
+
+\begin{document}
+	\input{Title}
+	\newpage
+	\pagestyle{fancy}
+	\fancyhf{}
+	\rhead{Computer Assignment 5}
+	\lhead{Signals and Systems}
+	\cfoot{\thepage}
+	
+	\section{Ideal Sampling and Sinc Reconstruction}
+	\subsection{Sampling}
+	The Nyquist sampling rate is $F_n = 180\, \text{Hz}$. The function is depicted in Figure \ref{1-xSignal}. Then we sampled the mentioned signal at different rate and the result is shown in Figure \ref{1-SampledDifferentFreq}.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{1-xsignal.jpg}
+		\caption{$x(t) = \cos{(2\pi\cdot40 t)} + 0.6 \cos{(2\pi\cdot90 t)}$}
+		\label{1-xSignal}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{sampleDifferentFreq.jpg}
+		\caption{Different sample frequency values are shown along with the original signal. }
+		\label{1-SampledDifferentFreq}
+	\end{figure}
+	\subsection{Reconstruction}
+	
+	\subsubsection{Result}
+		We construct sampled signals using sinc-interpolation and the result is shown in the Figures \ref{1-signalr150} to \ref{1-signalr500}. 
+		
+			\begin{figure}[H]
+			\centering
+			\includegraphics[width = 0.8\textwidth]{1-Signalr150.jpg}
+			\caption{Original and reconstructed signal}
+			\label{1-signalr150}
+		\end{figure}
+			\begin{figure}[H]
+			\centering
+			\includegraphics[width = 0.8\textwidth]{1-Signalr200.jpg}
+			\caption{Original and reconstructed signal}
+			\label{1-signalr200}
+		\end{figure}
+			\begin{figure}[H]
+			\centering
+			\includegraphics[width = 0.8\textwidth]{1-Signalr500.jpg}
+			\caption{Original and reconstructed signal}
+			\label{1-signalr500}
+		\end{figure}
+		
+		We encountered an anomaly. It seems like the 200Hz sampling rate has lower error than 500Hz. This effect is normal, though it feels incredibly counterintuitive. Theoretically both frequencies are able to construct exact signal. By cutting off the signal at 0 and 0.1 seconds, we make artificial sharp edges that troubles sinc-interpolation. The sinc interpolation tries to reconstruct these nonexistent sharp edges, which causes extreme oscillation near the boundaries. If you look at the boundaries you can see this effect. 
+		
+		At 500 Hz, the interpolation has a Nyquist bandwidth of 250 Hz. Because the bandwidth is so wide, the math attempts to accurately trace that artificial sharp drop-off at the edges. This generates high-amplitude, high-frequency (up to 250 Hz) Gibbs ringing that bleeds into your time window.
+		
+		At 200 Hz, the Nyquist bandwidth is exactly 100 Hz. The interpolation is mathematically physically incapable of generating frequencies above 100 Hz. Because your true signal is 90 Hz, this tight bandwidth perfectly preserves your original signal while acting as a strict low-pass filter that blocks the high-frequency truncation artifacts.
+	\subsubsection{Code}
+	Instead of summation over \var{n} and \var{t}, we use the MATLAB built-in matrix multiplication that execute much faster than a simple loop.
+	\begin{lstlisting}
+Fs = [150 , 200, 500];
+Ts = 1./Fs;
+
+t1 = 0:Ts(1):0.1;
+t2 = 0:Ts(2):0.1;
+t3 = 0:Ts(3):0.1;
+
+t = linspace(0,0.1, 50000);
+x = func(t);
+
+%Fs = 150Hz
+[Ts_grid, T_grid] = ndgrid(t , t1);
+x1 = func(t1);
+x_r1 = sinc((Ts_grid-T_grid)./Ts(1))* x1(:);
+	\end{lstlisting}
+	
+	\section{Aliasing in the Frequency Domain}
+	Increasing frequency when it is still under Nyquist rate, moves one component over frequency domain (the term corresponding to 160Hz cosine.). But above the Nyquist rate, increasing frequency only makes peaks sharper. You can see the effect using the interactive slider in MATLAB.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{2-FT200Hz.jpg}
+		\caption{The Fourier transform of the signal with a sampling rate under Nyquist limit. }
+		\label{2-FT200Hz}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{2-FT200Hz-2.jpg}
+		\caption{The Fourier transform of the signal with a sampling rate under Nyquist limit. Decomposed to different terms.}
+		\label{2-FT200Hz-2}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{2-FT400Hz.jpg}
+		\caption{The Fourier transform of the signal which the sampling rate is above Nyquist limit.}
+		\label{2-FT400Hz}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = 0.8\textwidth]{2-FT400Hz-2.jpg}
+		\caption{The Fourier transform of the signal which the sampling rate is above Nyquist limit. Decomposed to different terms.}
+		\label{2-FT400Hz-2}
+	\end{figure}
+	
+	\section{Practical Sampling with Zero-Order Hold}
+	\subsection{Result}
+	Graphs are shown in Figure \ref{3}.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width = \textwidth]{3.jpg}
+		\caption{}
+		\label{3}
+	\end{figure}
+	
+	
+	As we expected, error of the ZOH is much higher than ideal sinc interpolation(3 order of magnitude in  this case). The ZOH is easier to archive. Simply you need a switch and a capacitor. The capacitor keep the voltage steady then when switch closes again, the voltage level would change to new value. 
+	\subsection{Code}
+	We use a built-in MATLAB function called \var{interpolate} for the ZOH reconstruction. 
+	\begin{lstlisting}
+Fs = 100;                 
+Ts = 1/Fs;                
+t = 0:0.0001:0.5;         
+t_n = 0:Ts:0.5;           
+
+x_t = sin(2*pi*10*t) + 0.5*sin(2*pi*35*t);
+x_n = sin(2*pi*10*t_n) + 0.5*sin(2*pi*35*t_n);
+
+x_zoh = interp1(t_n, x_n, t, 'previous'); 
+
+[Ts_grid, T_grid] = ndgrid(t, t_n);
+x_sinc = sinc((Ts_grid - T_grid) / Ts) * x_n(:);
+
+error_zoh = mean((x_t - x_zoh).^2);
+error_sinc = mean((x_t - x_sinc').^2);
+
+	\end{lstlisting}
+\end{document}
+
